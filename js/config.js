@@ -2021,8 +2021,8 @@ function generateShopOffers(count = SHOP_OFFER_COUNT, difficultyLevel = 2, wave 
   return offers;
 }
 
-const WAVE_DURATION_BASE = 45;
-const WAVE_DURATION_GROWTH = 4;
+const WAVE_DURATION_BASE = 40;
+const WAVE_DURATION_GROWTH = 3;
 const WAVE_DURATION = WAVE_DURATION_BASE;
 const TOTAL_WAVES = 10;
 
@@ -2093,6 +2093,7 @@ const DIFFICULTIES = (function buildDifficulties() {
       minionHpMult: 0.88 + Math.pow(t, 0.72) * 3.85,
       wave1MinionHpMult: i <= 4 ? 1 : Math.max(0.55, 1.35 - i * 0.1),
       dmgMult: 0.7 + t * 1.15,
+      bossDmgMult: 0.74 + Math.pow(t, 0.9) * 0.55,
       speedMult: 0.85 + t * 0.4,
       countMult: 0.75 + t * 1.1,
       spawnRateMult: 1.3 - t * 0.65,

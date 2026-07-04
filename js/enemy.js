@@ -76,7 +76,8 @@ class Enemy {
       : 1;
     this.maxHp = Math.floor(def.hp * (1 + hpWaveScale) * hpDiffMult * hpTierMult * wave1HpEase);
     this.hp = this.maxHp;
-    this.damage = Math.floor(def.damage * (1 + dmgWaveScale) * d.dmgMult * dmgTierMult);
+    const dmgDiffMult = def.isBoss ? (d.bossDmgMult ?? d.dmgMult) : d.dmgMult;
+    this.damage = Math.floor(def.damage * (1 + dmgWaveScale) * dmgDiffMult * dmgTierMult);
     this.xp = Math.max(1, Math.floor(def.xp * d.rewardMult * XP_REWARD_MULT));
     this.gold = def.gold > 0 ? Math.max(1, Math.floor(def.gold * d.rewardMult * GOLD_REWARD_MULT)) : 0;
     this.color = def.color;
