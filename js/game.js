@@ -32,7 +32,7 @@ class Game {
     this.waveTimer = 0;
     this.currentWave = 1;
     this.pendingUpgrades = [];
-    this.difficulty = getDifficulty(2);
+    this.difficulty = getDifficulty(MIN_DIFFICULTY);
     this.runModifiers = [];
     this.runModifierFx = mergeRunModifierEffects([]);
 
@@ -68,7 +68,7 @@ class Game {
     });
   }
 
-  start(charId, difficulty = 2) {
+  start(charId, difficulty = MIN_DIFFICULTY) {
     this.selectedChar = charId;
     this.difficulty = getDifficulty(difficulty);
     this.player = new Player(charId, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);

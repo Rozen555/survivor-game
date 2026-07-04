@@ -48,7 +48,7 @@ class EnemyProjectile {
 class Enemy {
   constructor(type, x, y, waveScale = 1, diff = null) {
     const def = ENEMIES[type];
-    const d = diff || getDifficulty(2);
+    const d = diff || getDifficulty(MIN_DIFFICULTY);
     this.id = nextId++;
     this.type = type;
     this.x = x;
@@ -651,7 +651,7 @@ class EnemySpawner {
     this.spawnedThisWave = 0;
     this.eliteSpawned = false;
     this.bossSpawned = false;
-    this.difficulty = getDifficulty(2);
+    this.difficulty = getDifficulty(MIN_DIFFICULTY);
     this.spawnPool = ENEMY_SPAWN_POOL.map(p => ({ ...p }));
   }
 
@@ -672,7 +672,7 @@ class EnemySpawner {
   }
 
   setDifficulty(diff) {
-    this.difficulty = diff || getDifficulty(2);
+    this.difficulty = diff || getDifficulty(MIN_DIFFICULTY);
     this._applyWaveConfig();
   }
 

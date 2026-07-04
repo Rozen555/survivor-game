@@ -2060,10 +2060,11 @@ function getXpToNext(level) {
   return Math.floor(16 + lv * 11 + lv * lv * 0.75);
 }
 
-const MIN_DIFFICULTY = 2;
+const MIN_DIFFICULTY = 1;
 const MAX_DIFFICULTY = 8;
 
 const DIFFICULTY_LABELS = {
+  1: '入门',
   2: '普通',
   3: '困难',
   4: '挑战',
@@ -2086,7 +2087,8 @@ const DIFFICULTIES = (function buildDifficulties() {
       level: i,
       name: `难度 ${i}`,
       label: DIFFICULTY_LABELS[i],
-      desc: i === MIN_DIFFICULTY ? '标准体验，从此难度开始'
+      desc: i === MIN_DIFFICULTY ? '入门体验，最适合新手'
+        : i === 2 ? '标准体验'
         : i === MAX_DIFFICULTY ? '海量强敌，商店栏位最多'
         : `敌人强化 ${Math.round(t * 100)}% · 奖励 ${Math.round(rewardMult * 100)}%`,
       hpMult: 0.78 + Math.pow(t, 0.88) * 2.45,

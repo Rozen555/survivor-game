@@ -28,7 +28,7 @@ class UI {
     this._shopBuyHandler = null;
 
     this.selectedChar = 'warrior';
-    this.selectedDifficulty = 2;
+    this.selectedDifficulty = MIN_DIFFICULTY;
     this.setupMenu();
     this.setupDifficulty();
   }
