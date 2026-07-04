@@ -1,0 +1,23 @@
+幸存者 · Survivor Roguelike
+========================
+
+【如何开始】
+  双击「启动游戏.bat」，或直接双击 index.html，用 Chrome / Edge 打开。
+
+【操作】
+  WASD / 方向键 — 移动
+  Shift — 按住抛锚，松开收锚（核心机制）
+  空格 — 暂停
+
+【角色】
+  战士 · 铁锚   法师 · 雷锚   游侠 · 磁锚   召唤师 · 灵锚
+
+【难度】
+  1 入门 ~ 8 炼狱，可在主菜单调整。
+
+【在线试玩】
+  https://github.com/Rozen555/survivor-game
+  （可在 GitHub Pages 部署后填写在线地址）
+
+【引擎】
+  HTML5 Canvas + 原生 JavaScript（自制引擎）
