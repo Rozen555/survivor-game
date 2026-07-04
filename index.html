@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>幸存者 · Survivor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- 主菜单 -->
+    <div id="menu-screen" class="screen drop-zone">
+      <div class="menu-content">
+        <h1 class="game-title">幸存者</h1>
+        <p class="subtitle">Survivor Roguelike</p>
+        <div class="character-select">
+          <h2>选择角色</h2>
+          <div class="characters">
+            <button class="char-btn selected" data-char="warrior">
+              <span class="char-icon">⚔️</span>
+              <span class="char-name">战士</span>
+              <span class="char-desc">近战 · 顺劈/盾波</span>
+            </button>
+            <button class="char-btn" data-char="mage">
+              <span class="char-icon">🔮</span>
+              <span class="char-name">法师</span>
+              <span class="char-desc">魔法 · 冰箭/陨石</span>
+            </button>
+            <button class="char-btn" data-char="ranger">
+              <span class="char-icon">🏹</span>
+              <span class="char-name">游侠</span>
+              <span class="char-desc">投射 · 连射/爆炸箭</span>
+            </button>
+            <button class="char-btn" data-char="summoner">
+              <span class="char-icon">🧙</span>
+              <span class="char-name">召唤师</span>
+              <span class="char-desc">法阵 · 五兽后召火龙</span>
+            </button>
+          </div>
+        </div>
+        <div class="difficulty-select">
+          <h2>选择难度 <span class="diff-range">2 – 8</span></h2>
+          <div class="diff-controls">
+            <button type="button" id="diff-down" class="diff-btn" aria-label="降低难度">◀</button>
+            <div class="diff-display">
+              <span id="diff-level">难度 2</span>
+              <span id="diff-label" class="diff-label">普通</span>
+            </div>
+            <button type="button" id="diff-up" class="diff-btn" aria-label="提高难度">▶</button>
+          </div>
+          <p id="diff-desc" class="diff-desc">标准体验</p>
+        </div>
+        <a id="launch-link" href="一键开始游戏.hta" class="btn-launch">一键复制素材并启动</a>
+        <button id="copy-assets-btn" type="button" class="btn-secondary">素材说明</button>
+        <button id="start-btn" class="btn-primary">开始游戏</button>
+        <p id="asset-status" class="asset-warn">正在加载素材…</p>
+        <p class="asset-hint">若角色变成方块小人：双击 <code>copy-assets.bat</code> 复制骑士 PNG，再 Ctrl+F5 刷新</p>
+        <div class="controls-hint">
+          <p>WASD / 方向键 移动 · 空格 暂停 · 鼠标 选择升级</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div class="hud-top">
+        <div class="hud-stat">
+          <span class="label">生命</span>
+          <div class="bar-container">
+            <div id="hp-bar" class="bar hp-bar"></div>
+          </div>
+          <span id="hp-text">100/100</span>
+        </div>
+        <div class="hud-stat">
+          <span class="label">经验</span>
+          <div class="bar-container">
+            <div id="xp-bar" class="bar xp-bar"></div>
+          </div>
+          <span id="level-text">Lv.1</span>
+        </div>
+        <div class="hud-stat timer">
+          <span id="timer-text">00:00</span>
+        </div>
+        <div class="hud-stat kills">
+          <span>击杀: <span id="kill-count">0</span></span>
+        </div>
+        <div class="hud-stat difficulty-hud">
+          <span id="difficulty-hud">难2</span>
+        </div>
+      </div>
+      <div id="weapons-display" class="weapons-display"></div>
+    </div>
+
+    <!-- 升级选择 -->
+    <div id="levelup-screen" class="screen hidden">
+      <div class="levelup-content">
+        <h2>升级！</h2>
+        <p>选择一项强化</p>
+        <div id="upgrade-options" class="upgrade-options"></div>
+      </div>
+    </div>
+
+    <!-- 波次商店 -->
+    <div id="shop-screen" class="screen hidden">
+      <div class="shop-panel">
+        <div class="shop-header">
+          <div>
+            <h2 class="shop-title">波次商店</h2>
+            <p id="shop-wave-text" class="shop-wave">第 1 波完成</p>
+          </div>
+          <div class="shop-gold-wrap">
+            <span class="shop-gold-label">持有金币</span>
+            <span class="shop-gold">💰 <span id="gold-text">0</span></span>
+          </div>
+        </div>
+        <p class="shop-hint">随机商品 · 难度越高栏位越多 · 点击购买</p>
+        <div id="shop-items" class="shop-grid"></div>
+        <div class="shop-footer">
+          <button id="continue-btn" class="btn-primary shop-continue">继续下一波 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 游戏结束 -->
+    <div id="gameover-screen" class="screen hidden">
+      <div class="gameover-content">
+        <h2 id="gameover-title">游戏结束</h2>
+        <div class="stats-summary">
+          <p>存活时间: <span id="final-time">00:00</span></p>
+          <p>击杀数: <span id="final-kills">0</span></p>
+          <p>最高等级: <span id="final-level">1</span></p>
+          <p>完成波次: <span id="final-waves">0</span></p>
+          <p>难度: <span id="final-difficulty">2</span></p>
+        </div>
+        <button id="restart-btn" class="btn-primary">再来一局</button>
+        <button id="menu-btn" class="btn-secondary">返回菜单</button>
+      </div>
+    </div>
+
+    <!-- 暂停 -->
+    <div id="pause-screen" class="screen hidden">
+      <div class="pause-content">
+        <h2>暂停</h2>
+        <button id="resume-btn" class="btn-primary">继续</button>
+        <button id="quit-btn" class="btn-secondary">退出</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/knight-sprites.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/enemy.js"></script>
+  <script src="js/weapon.js"></script>
+  <script src="js/summon.js"></script>
+  <script src="js/pickup.js"></script>
+  <script src="js/background.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

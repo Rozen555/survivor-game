@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>幸存者 - 启动中</title>
+  <HTA:APPLICATION ID="SurvivorLauncher" APPLICATIONNAME="Survivor" BORDER="thin" CAPTION="yes" SHOWINTASKBAR="yes" SINGLEINSTANCE="yes" SYSMENU="yes" WINDOWSTATE="normal" SCROLL="no" />
+  <style>
+    body { font-family: Segoe UI, sans-serif; background: #12121f; color: #eee; padding: 24px; margin: 0; }
+    h2 { color: #ffd93d; margin-top: 0; }
+    #log { font-size: 13px; line-height: 1.8; color: #aaa; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h2>幸存者 · 正在启动</h2>
+  <div id="log">准备中…</div>
+  <script language="JScript">
+    var logEl = document.getElementById('log');
+    logEl.innerText = '';
+    function log(msg) { logEl.innerText += msg + '\r\n'; }
+
+    function ensureFolder(path) {
+      var fso = new ActiveXObject('Scripting.FileSystemObject');
+      if (fso.FolderExists(path)) return;
+      var parts = path.split('\\');
+      var cur = parts[0];
+      for (var i = 1; i < parts.length; i++) {
+        cur += '\\' + parts[i];
+        if (!fso.FolderExists(cur)) fso.CreateFolder(cur);
+      }
+    }
+
+    function listPngs(folder, prefix, out) {
+      var fc = new Enumerator(folder.Files);
+      for (; !fc.atEnd(); fc.moveNext()) {
+        var f = fc.item();
+        if (/\.png$/i.test(f.Name)) out.push(prefix + f.Name);
+      }
+      var sc = new Enumerator(folder.SubFolders);
+      for (; !sc.atEnd(); sc.moveNext()) {
+        var sf = sc.item();
+        listPngs(sf, prefix + sf.Name + '/', out);
+      }
+    }
+
+    function writeManifest(gameDir, pngList) {
+      var fso = new ActiveXObject('Scripting.FileSystemObject');
+      var manifestDir = gameDir + '\\assets\\knights';
+      ensureFolder(manifestDir);
+      var json = '{"files":[';
+      for (var i = 0; i < pngList.length; i++) {
+        if (i > 0) json += ',';
+        json += '"' + pngList[i].replace(/\\/g, '/').replace(/"/g, '\\"') + '"';
+      }
+      json += '],"ts":' + new Date().getTime() + '}';
+      var mf = fso.CreateTextFile(manifestDir + '\\manifest.json', true);
+      mf.Write(json);
+      mf.Close();
+    }
+
+    try {
+      var fso = new ActiveXObject('Scripting.FileSystemObject');
+      var shell = new ActiveXObject('WScript.Shell');
+      var htaPath = unescape(location.pathname.replace(/^\//, '').replace(/\//g, '\\'));
+      var gameDir = fso.GetParentFolderName(htaPath);
+      var src = shell.ExpandEnvironmentStrings('%USERPROFILE%')
+        + '\\Desktop\\Tiny Swords (Update 010)\\Factions\\Knights\\Troops';
+      var dst = gameDir + '\\assets\\knights\\Troops';
+
+      log('游戏目录: ' + gameDir);
+
+      if (!fso.FileExists(gameDir + '\\index.html')) {
+        log('[失败] 找不到 index.html');
+        log('请把本文件放在游戏文件夹内再运行');
+      } else if (fso.FolderExists(src)) {
+        ensureFolder(dst);
+        shell.Run('cmd /c xcopy "' + src + '\\*" "' + dst + '\\" /E /I /Y', 0, true);
+        log('[OK] 素材已从桌面复制到 assets\\knights\\Troops');
+      } else {
+        log('[提示] 桌面 Tiny Swords 未找到');
+        log('请双击 copy-assets.bat 或手动复制 Troops 文件夹');
+      }
+
+      var pngs = [];
+      if (fso.FolderExists(dst)) {
+        listPngs(fso.GetFolder(dst), 'Troops/', pngs);
+        writeManifest(gameDir, pngs);
+        log('[OK] manifest: ' + pngs.length + ' 张 PNG');
+        if (pngs.length === 0) {
+          log('[警告] Troops 文件夹里没有 PNG，角色会显示为方块小人');
+        }
+      }
+
+      var indexPath = gameDir + '\\index.html';
+      log('正在打开游戏…');
+      shell.Run('cmd /c start "" "' + indexPath + '"', 1, false);
+      log('[OK] 已启动 — 请 Ctrl+F5 强制刷新');
+      window.setTimeout(function() { try { window.close(); } catch (x) {} }, 2500);
+    } catch (e) {
+      log('错误: ' + e.message);
+    }
+  </script>
+</body>
+</html>
