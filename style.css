@@ -91,9 +91,107 @@ body {
   background: rgba(0, 0, 0, 0.25);
   border-radius: 12px;
   border: 1px solid #333;
-  max-width: 460px;
+  max-width: 520px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.anchor-guide {
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: rgba(116, 185, 255, 0.06);
+  border-radius: 12px;
+  border: 1px solid rgba(116, 185, 255, 0.22);
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.anchor-guide h2 {
+  font-size: 0.95rem;
+  color: #74b9ff;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.anchor-guide-lead {
+  text-align: center;
+  color: #aaa;
+  font-size: 0.82rem;
+  margin-bottom: 0.75rem;
+}
+
+.anchor-guide-lead kbd {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  background: #252540;
+  border: 1px solid #444;
+  color: #fdcb6e;
+  font-family: inherit;
+  font-size: 0.8rem;
+}
+
+.anchor-states {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.anchor-state {
+  padding: 0.45rem 0.5rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid #333;
+  font-size: 0.72rem;
+  color: #888;
+  line-height: 1.35;
+}
+
+.anchor-state-title {
+  display: block;
+  font-weight: 600;
+  font-size: 0.78rem;
+  margin-bottom: 0.2rem;
+}
+
+.anchor-state.drift .anchor-state-title { color: #74b9ff; }
+.anchor-state.anchored .anchor-state-title { color: #fdcb6e; }
+.anchor-state.haul .anchor-state-title { color: #55efc4; }
+
+.anchor-types {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.72rem;
+  color: #999;
+}
+
+.anchor-types li strong {
+  color: #ccc;
+  font-weight: 600;
+}
+
+.anchor-guide-note {
+  margin-top: 0.65rem;
+  text-align: center;
+  font-size: 0.72rem;
+  color: #7f8c8d;
+}
+
+@media (max-width: 640px) {
+  .anchor-states {
+    grid-template-columns: 1fr;
+  }
+  .anchor-types {
+    grid-template-columns: 1fr;
+  }
 }
 
 .difficulty-select h2 {
@@ -361,6 +459,31 @@ body {
   color: #ffd93d;
   font-size: 0.85rem;
   font-weight: 700;
+}
+
+.hud-stat.anchor-status {
+  font-size: 0.85rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(116, 185, 255, 0.1);
+  border: 1px solid rgba(116, 185, 255, 0.28);
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.hud-stat.anchor-status.anchored {
+  color: #fdcb6e;
+  background: rgba(253, 203, 110, 0.12);
+  border-color: rgba(253, 203, 110, 0.35);
+}
+
+.hud-stat.anchor-status.hauling {
+  color: #55efc4;
+  background: rgba(85, 239, 196, 0.1);
+  border-color: rgba(85, 239, 196, 0.3);
+}
+
+.hud-stat.anchor-status.drift {
+  color: #74b9ff;
 }
 
 .weapons-display {

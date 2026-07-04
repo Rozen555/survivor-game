@@ -191,7 +191,7 @@ class WeaponInstance {
   }
 
   areaMult(player) {
-    return player.areaMult || 1;
+    return player.getAreaMult?.() ?? (player.areaMult || 1);
   }
 }
 

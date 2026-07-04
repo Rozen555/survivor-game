@@ -70,10 +70,14 @@ class Enemy {
       dmgTierMult = 1.12;
     }
     this.speed = def.speed * (1 + waveScale * 0.05) * d.speedMult * (def.isBoss ? 1.14 : def.isElite ? 1.05 : 1);
-    this.maxHp = Math.floor(def.hp * (1 + hpWaveScale) * d.hpMult * hpTierMult);
+    const hpDiffMult = (def.isElite || def.isBoss) ? d.hpMult : (d.minionHpMult ?? d.hpMult);
+    const wave1HpEase = (waveScale <= 1 && !def.isElite && !def.isBoss)
+      ? (d.wave1MinionHpMult ?? 1)
+      : 1;
+    this.maxHp = Math.floor(def.hp * (1 + hpWaveScale) * hpDiffMult * hpTierMult * wave1HpEase);
     this.hp = this.maxHp;
     this.damage = Math.floor(def.damage * (1 + dmgWaveScale) * d.dmgMult * dmgTierMult);
-    this.xp = Math.max(1, Math.floor(def.xp * d.rewardMult));
+    this.xp = Math.max(1, Math.floor(def.xp * d.rewardMult * XP_REWARD_MULT));
     this.gold = def.gold > 0 ? Math.max(1, Math.floor(def.gold * d.rewardMult * GOLD_REWARD_MULT)) : 0;
     this.color = def.color;
     this.isBoss = def.isBoss || false;
@@ -684,6 +688,8 @@ class EnemySpawner {
 
   update(dt, game) {
     this.waveTimer += dt;
+    if (isWaveTimedOut(game.waveTimer, game.currentWave)) return;
+
     this.spawnTimer += dt;
 
     const cfg = this._waveConfig();

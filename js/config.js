@@ -1,42 +1,114 @@
 const CANVAS_WIDTH = 1024;
 const CANVAS_HEIGHT = 576;
 
+const ANCHOR_CONFIG = {
+  deployRadius: 90,
+  driftDamageMult: 0.35,
+  driftAreaMult: 0.78,
+  driftAttackSpeedMult: 0.82,
+  anchoredDamageMult: 1,
+  anchoredAreaMult: 1,
+  anchoredAttackSpeedMult: 1.08,
+  anchoredRegen: 2.5,
+  haulSpeedMult: 1.38,
+  haulDuration: 1.8,
+  haulCooldown: 2.8,
+  haulInvincible: 0.28,
+  pullStrength: 38,
+  ghostAnchorMax: 2,
+  ghostLife: 8,
+  deployPulseRadius: 118,
+  chainSlowMult: 0.65,
+  chainHitWidth: 15,
+  chainLinkSpacing: 14,
+};
+
+const ANCHOR_TYPES = {
+  iron: {
+    id: 'iron',
+    name: '铁锚',
+    icon: '⚓',
+    armorBonus: 2,
+    regenBonus: 0.8,
+    damageMult: 1,
+    areaMult: 1.08,
+  },
+  thunder: {
+    id: 'thunder',
+    name: '雷锚',
+    icon: '⚡',
+    deployPulseDamage: 22,
+    pulseRadius: 100,
+    stormDps: 10,
+    stormTick: 0.3,
+    stormSlow: 0.72,
+    damageMult: 1,
+    areaMult: 1.38,
+  },
+  magnet: {
+    id: 'magnet',
+    name: '磁锚',
+    icon: '🧲',
+    pickupMult: 1.55,
+    towerDamage: 22,
+    towerDamagePerLevel: 1.75,
+    towerRange: 290,
+    towerShootCd: 0.56,
+    towerProjSpeed: 520,
+    damageMult: 1,
+    areaMult: 1.25,
+  },
+  spirit: {
+    id: 'spirit',
+    name: '灵锚',
+    icon: '👻',
+    summonBoost: 1.22,
+    summonFrenzySpeed: 1.4,
+    damageMult: 1,
+    areaMult: 1.28,
+  },
+};
+
 const CHARACTERS = {
   warrior: {
     name: '战士',
     maxHp: 120,
-    speed: 210,
-    damage: 1.1,
-    armor: 2,
+    speed: 205,
+    damage: 1.02,
+    armor: 1,
     startWeapon: 'whip',
+    anchorType: 'iron',
     color: '#ff6b6b',
   },
   mage: {
     name: '法师',
-    maxHp: 80,
+    maxHp: 95,
     speed: 200,
     damage: 1.4,
     armor: 0,
     startWeapon: 'magic',
+    anchorType: 'thunder',
     color: '#70a1ff',
   },
   ranger: {
     name: '游侠',
-    maxHp: 90,
+    maxHp: 105,
     speed: 260,
     damage: 1.0,
     armor: 1,
     startWeapon: 'knife',
+    anchorType: 'magnet',
     color: '#6bcb77',
   },
   summoner: {
     name: '召唤师',
-    maxHp: 85,
+    maxHp: 100,
     speed: 195,
     damage: 0.92,
     summonDamageMult: 1.12,
     armor: 0,
     startSummon: 'turret',
+    anchorType: 'spirit',
     color: '#a29bfe',
   },
 };
@@ -266,10 +338,10 @@ const WEAPONS = {
     name: '鞭刃',
     icon: '🌀',
     type: 'melee',
-    damage: 12,
-    cooldown: 0.8,
-    range: 95,
-    arc: Math.PI * 0.55,
+    damage: 11,
+    cooldown: 0.85,
+    range: 90,
+    arc: Math.PI * 0.52,
     color: '#ffd93d',
     sprite: 'weapon_whip',
     desc: '横扫前方敌人',
@@ -667,8 +739,8 @@ const CLASS_ATTACK_UPGRADES = [
     icon: '⚔️',
     classes: ['warrior'],
     minDifficulty: 0,
-    desc: '攻击范围 +12% · 护甲 +3',
-    apply: (p) => { p.areaMult = (p.areaMult || 1) * 1.12; p.armor += 3; },
+    desc: '攻击范围 +10% · 护甲 +2',
+    apply: (p) => { p.areaMult = (p.areaMult || 1) * 1.1; p.armor += 2; },
   },
   {
     id: 'ironWill',
@@ -676,8 +748,8 @@ const CLASS_ATTACK_UPGRADES = [
     icon: '🛡️',
     classes: ['warrior'],
     minDifficulty: 2,
-    desc: '生命 +30 · 伤害 +10%',
-    apply: (p) => { p.maxHp += 30; p.hp = Math.min(p.hp + 30, p.maxHp); p.damageMult *= 1.1; },
+    desc: '生命 +20 · 伤害 +8%',
+    apply: (p) => { p.maxHp += 20; p.hp = Math.min(p.hp + 20, p.maxHp); p.damageMult *= 1.08; },
   },
   {
     id: 'lastStand',
@@ -685,8 +757,8 @@ const CLASS_ATTACK_UPGRADES = [
     icon: '🔥',
     classes: ['warrior'],
     minDifficulty: 5,
-    desc: '伤害 +15% · 击杀回血 +3',
-    apply: (p) => { p.damageMult *= 1.15; p.lifesteal = (p.lifesteal || 0) + 3; },
+    desc: '伤害 +12% · 击杀回血 +2',
+    apply: (p) => { p.damageMult *= 1.12; p.lifesteal = (p.lifesteal || 0) + 2; },
   },
   {
     id: 'veteranGuard',
@@ -694,8 +766,8 @@ const CLASS_ATTACK_UPGRADES = [
     icon: '🪖',
     classes: ['warrior'],
     minDifficulty: 1,
-    desc: '护甲 +2 · 生命 +12',
-    apply: (p) => { p.armor += 2; p.maxHp += 12; p.hp = Math.min(p.hp + 12, p.maxHp); },
+    desc: '护甲 +1 · 生命 +10',
+    apply: (p) => { p.armor += 1; p.maxHp += 10; p.hp = Math.min(p.hp + 10, p.maxHp); },
   },
   {
     id: 'shieldMaster',
@@ -703,8 +775,8 @@ const CLASS_ATTACK_UPGRADES = [
     icon: '🏰',
     classes: ['warrior'],
     minDifficulty: 2,
-    desc: '护甲 +4 · 生命 +20',
-    apply: (p) => { p.armor += 4; p.maxHp += 20; p.hp = Math.min(p.hp + 20, p.maxHp); },
+    desc: '护甲 +3 · 生命 +15',
+    apply: (p) => { p.armor += 3; p.maxHp += 15; p.hp = Math.min(p.hp + 15, p.maxHp); },
   },
   {
     id: 'colossus',
@@ -712,8 +784,8 @@ const CLASS_ATTACK_UPGRADES = [
     icon: '🗿',
     classes: ['warrior'],
     minDifficulty: 4,
-    desc: '伤害 +14% · 范围 +10%',
-    apply: (p) => { p.damageMult *= 1.14; p.areaMult = (p.areaMult || 1) * 1.1; },
+    desc: '伤害 +10% · 范围 +8%',
+    apply: (p) => { p.damageMult *= 1.1; p.areaMult = (p.areaMult || 1) * 1.08; },
   },
   {
     id: 'bloodRage',
@@ -921,6 +993,145 @@ const CLASS_ATTACK_UPGRADES = [
     minDifficulty: 7,
     desc: '召唤伤害 +15% · 伤害 +10%',
     apply: (p) => { p.summonDamageMult = (p.summonDamageMult || 1) * 1.15; p.damageMult *= 1.1; },
+  },
+  {
+    id: 'ironAnchorWall',
+    name: '铁锚壁垒',
+    icon: '⚓',
+    classes: ['warrior'],
+    minDifficulty: 1,
+    desc: '锚定护甲 +2 · 锚定回血 +0.6/s',
+    apply: (p) => {
+      p.anchorArmorBonus = (p.anchorArmorBonus || 0) + 2;
+      p.anchorRegenFlat = (p.anchorRegenFlat || 0) + 0.6;
+    },
+  },
+  {
+    id: 'ironAnchorCrush',
+    name: '重锚镇压',
+    icon: '🔗',
+    classes: ['warrior'],
+    minDifficulty: 3,
+    desc: '锚区 +15% · 拉拽 +20% · 锚伤 +10%',
+    apply: (p) => {
+      p.anchorRadiusMult = (p.anchorRadiusMult || 1) * 1.15;
+      p.anchorPullMult = (p.anchorPullMult || 1) * 1.2;
+      p.anchorDamageBonus = (p.anchorDamageBonus || 1) * 1.1;
+    },
+  },
+  {
+    id: 'ironUnbreakable',
+    name: '不灭铁链',
+    icon: '🛡️',
+    classes: ['warrior'],
+    minDifficulty: 5,
+    desc: '锚定护甲 +3 · 收锚无敌 +0.12s',
+    apply: (p) => {
+      p.anchorArmorBonus = (p.anchorArmorBonus || 0) + 3;
+      p.haulInvincibleBonus = (p.haulInvincibleBonus || 0) + 0.12;
+    },
+  },
+  {
+    id: 'thunderStormCore',
+    name: '雷暴核心',
+    icon: '⚡',
+    classes: ['mage'],
+    minDifficulty: 1,
+    desc: '雷暴/脉冲伤害 +22%',
+    apply: (p) => { p.stormDamageMult = (p.stormDamageMult || 1) * 1.22; },
+  },
+  {
+    id: 'thunderFieldAmp',
+    name: '引雷领域',
+    icon: '⛈️',
+    classes: ['mage'],
+    minDifficulty: 3,
+    desc: '锚区 +12% · 雷暴频率 +18%',
+    apply: (p) => {
+      p.anchorRadiusMult = (p.anchorRadiusMult || 1) * 1.12;
+      p.stormTickMult = (p.stormTickMult || 1) * 1.18;
+    },
+  },
+  {
+    id: 'thunderCataclysm',
+    name: '万钧雷劫',
+    icon: '🌩️',
+    classes: ['mage'],
+    minDifficulty: 5,
+    desc: '雷暴伤害 +20% · 拉拽 +18%',
+    apply: (p) => {
+      p.stormDamageMult = (p.stormDamageMult || 1) * 1.2;
+      p.anchorPullMult = (p.anchorPullMult || 1) * 1.18;
+    },
+  },
+  {
+    id: 'towerForge',
+    name: '箭塔锻造',
+    icon: '🏹',
+    classes: ['ranger'],
+    minDifficulty: 1,
+    desc: '箭塔伤害 +25%',
+    apply: (p) => { p.towerDamageMult = (p.towerDamageMult || 1) * 1.25; },
+  },
+  {
+    id: 'magnetHarvest',
+    name: '磁锚猎场',
+    icon: '🧲',
+    classes: ['ranger'],
+    minDifficulty: 3,
+    desc: '锚定拾取 +30% · 箭塔射程 +15%',
+    apply: (p) => {
+      p.anchorPickupMultBonus = (p.anchorPickupMultBonus || 1) * 1.3;
+      p.towerRangeMult = (p.towerRangeMult || 1) * 1.15;
+    },
+  },
+  {
+    id: 'towerBarrage',
+    name: '连射箭塔',
+    icon: '🎯',
+    classes: ['ranger'],
+    minDifficulty: 5,
+    desc: '箭塔伤害 +15% · 射速 +20%',
+    apply: (p) => {
+      p.towerDamageMult = (p.towerDamageMult || 1) * 1.15;
+      p.towerSpeedMult = (p.towerSpeedMult || 1) * 1.2;
+    },
+  },
+  {
+    id: 'spiritAnchorPact',
+    name: '缚灵深契',
+    icon: '👻',
+    classes: ['summoner'],
+    minDifficulty: 1,
+    desc: '锚定召唤伤害 +18% · 狂暴 +12%',
+    apply: (p) => {
+      p.summonBoostMult = (p.summonBoostMult || 1) * 1.18;
+      p.summonFrenzyMult = (p.summonFrenzyMult || 1) * 1.12;
+    },
+  },
+  {
+    id: 'spiritNexus',
+    name: '魂潮阵眼',
+    icon: '🌀',
+    classes: ['summoner'],
+    minDifficulty: 3,
+    desc: '锚区 +10% · 召唤狂暴 +20%',
+    apply: (p) => {
+      p.anchorRadiusMult = (p.anchorRadiusMult || 1) * 1.1;
+      p.summonFrenzyMult = (p.summonFrenzyMult || 1) * 1.2;
+    },
+  },
+  {
+    id: 'spiritRampage',
+    name: '魂潮狂怒',
+    icon: '💢',
+    classes: ['summoner'],
+    minDifficulty: 5,
+    desc: '锚定伤害 +12% · 召唤伤害 +15%',
+    apply: (p) => {
+      p.anchorDamageBonus = (p.anchorDamageBonus || 1) * 1.12;
+      p.summonBoostMult = (p.summonBoostMult || 1) * 1.15;
+    },
   },
 ];
 
@@ -1376,6 +1587,11 @@ const STAT_UPGRADES = [
   { id: 'wanderer', name: '流浪者', icon: '🧭', desc: '速度 +10% · 拾取 +10%', minDifficulty: 4, apply: (p) => { p.speed *= 1.1; p.pickupRange *= 1.1; } },
   { id: 'phoenixSpark', name: '凤凰余烬', icon: '🔥', desc: '再生 +1.5 · 生命 +10', minDifficulty: 5, apply: (p) => { p.regen += 1.5; p.maxHp += 10; p.hp = Math.min(p.hp + 10, p.maxHp); } },
   { id: 'echo', name: '回响', icon: '🔔', desc: '经验 +10% · 额外攻击 +6%', minDifficulty: 4, apply: (p) => { p.xpMult *= 1.1; p.extraCast = Math.min(0.75, (p.extraCast || 0) + 0.06); } },
+  { id: 'anchorWell', name: '锚泉', icon: '💧', desc: '锚定回血 +20%', minDifficulty: 0, apply: (p) => { p.anchorRegenMult = (p.anchorRegenMult || 1) * 1.2; } },
+  { id: 'anchorFooting', name: '稳锚基座', icon: '🪨', desc: '锚区范围 +12%', minDifficulty: 1, apply: (p) => { p.anchorRadiusMult = (p.anchorRadiusMult || 1) * 1.12; } },
+  { id: 'ghostTideStat', name: '残潮印记', icon: '🌫️', desc: '幽灵锚点 +4 秒', minDifficulty: 2, apply: (p) => { p.ghostLifeBonus = (p.ghostLifeBonus || 0) + 4; } },
+  { id: 'haulCharm', name: '收锚护符', icon: '🧿', desc: '收锚无敌 +0.15 秒', minDifficulty: 2, apply: (p) => { p.haulInvincibleBonus = (p.haulInvincibleBonus || 0) + 0.15; } },
+  { id: 'anchorSanctuary', name: '锚域庇护', icon: '🏝️', desc: '锚定护甲 +1 · 回血 +0.5/s', minDifficulty: 3, apply: (p) => { p.anchorArmorBonus = (p.anchorArmorBonus || 0) + 1; p.anchorRegenFlat = (p.anchorRegenFlat || 0) + 0.5; } },
 ];
 
 const ATTACK_UPGRADES = [
@@ -1410,6 +1626,15 @@ const ATTACK_UPGRADES = [
   { id: 'overloadMinor', name: '微过载', icon: '⚙️', desc: '额外攻击 +10% · 攻速 +6%', minDifficulty: 4, apply: (p) => { p.extraCast = Math.min(0.75, (p.extraCast || 0) + 0.1); p.attackSpeedMult = (p.attackSpeedMult || 1) * 1.06; } },
   { id: 'pierce', name: '穿透', icon: '📌', desc: '伤害 +9% · 暴击 +4%', minDifficulty: 4, apply: (p) => { p.damageMult *= 1.09; p.critChance += 0.04; } },
   { id: 'frenzy', name: '狂乱', icon: '🌀', desc: '攻速 +12% · 额外攻击 +8%', minDifficulty: 5, apply: (p) => { p.attackSpeedMult = (p.attackSpeedMult || 1) * 1.12; p.extraCast = Math.min(0.75, (p.extraCast || 0) + 0.08); } },
+  { id: 'anchorChain', name: '链长延伸', icon: '⛓️', desc: '锚区范围 +18% · 拉拽 +15%', minDifficulty: 0, apply: (p) => { p.anchorRadiusMult = (p.anchorRadiusMult || 1) * 1.18; p.anchorPullMult = (p.anchorPullMult || 1) * 1.15; } },
+  { id: 'anchorHaul', name: '急收锚', icon: '🌊', desc: '收锚加速 +25% · 冷却 -20%', minDifficulty: 1, apply: (p) => { p.haulSpeedMult = (p.haulSpeedMult || 1) * 1.25; p.haulCooldownMult = (p.haulCooldownMult || 1) * 0.8; } },
+  { id: 'anchorDepth', name: '深锚', icon: '⚓', desc: '锚定时伤害 +12% · 锚定护甲 +2', minDifficulty: 2, apply: (p) => { p.anchorDamageBonus = (p.anchorDamageBonus || 1) * 1.12; p.anchorArmorBonus = (p.anchorArmorBonus || 0) + 2; } },
+  { id: 'ghostAnchor', name: '双锚影', icon: '👥', desc: '幽灵锚点 +1 · 链间减速敌人', minDifficulty: 3, apply: (p) => { p.ghostAnchorMax = (p.ghostAnchorMax || ANCHOR_CONFIG.ghostAnchorMax) + 1; p.anchorChainSlow = (p.anchorChainSlow || 0) + 1; } },
+  { id: 'anchorResonance', name: '锚击共鸣', icon: '🔔', desc: '锚定时伤害 +10% · 锚定攻速 +8%', minDifficulty: 1, apply: (p) => { p.anchorDamageBonus = (p.anchorDamageBonus || 1) * 1.1; p.anchorAtkspeedBonus = (p.anchorAtkspeedBonus || 1) * 1.08; } },
+  { id: 'tidalGrip', name: '潮汐紧箍', icon: '🌀', desc: '锚区拉拽 +22%', minDifficulty: 1, apply: (p) => { p.anchorPullMult = (p.anchorPullMult || 1) * 1.22; } },
+  { id: 'anchorSpecialAmp', name: '锚物增幅', icon: '✨', desc: '雷暴/箭塔/召唤狂暴 +12%', minDifficulty: 2, apply: (p) => { p.stormDamageMult = (p.stormDamageMult || 1) * 1.12; p.towerDamageMult = (p.towerDamageMult || 1) * 1.12; p.summonFrenzyMult = (p.summonFrenzyMult || 1) * 1.12; } },
+  { id: 'anchorMastery', name: '抛锚精通', icon: '⚓', desc: '收锚加速 +15% · 冷却 -12%', minDifficulty: 3, apply: (p) => { p.haulSpeedMult = (p.haulSpeedMult || 1) * 1.15; p.haulCooldownMult = (p.haulCooldownMult || 1) * 0.88; } },
+  { id: 'ironTether', name: '铁链束缚', icon: '🔗', desc: '锚区 +10% · 链间减速 +1', minDifficulty: 4, apply: (p) => { p.anchorRadiusMult = (p.anchorRadiusMult || 1) * 1.1; p.anchorChainSlow = (p.anchorChainSlow || 0) + 1; } },
 ];
 
 const SHOP_ITEMS = [
@@ -1475,7 +1700,19 @@ const SHOP_ITEMS = [
   { id: 'shopPickupSpark', icon: '✨', name: '拾取电容', desc: '拾取后短暂增伤', cost: 52, minDifficulty: 2, tag: 'mechanic', apply: (p) => { p.mechanics.pickupSpark += 1; } },
   { id: 'shopCounter', icon: '🥊', name: '反击手套', desc: '受击后下次攻击增伤', cost: 58, minDifficulty: 2, tag: 'mechanic', apply: (p) => { p.mechanics.counterStrike += 1; } },
   { id: 'shopWhirlwind', icon: '🌀', name: '旋风护符', desc: '周期范围斩击', cost: 78, minDifficulty: 3, tag: 'mechanic', apply: (p) => { p.mechanics.whirlwind += 1; } },
-  { id: 'shopAnchor', icon: '🎯', name: '锚定镜片', desc: '站立越久伤害越高', cost: 68, minDifficulty: 3, tag: 'mechanic', apply: (p) => { p.mechanics.anchorShot += 1; } },
+  { id: 'shopAnchor', icon: '🎯', name: '锚定镜片', desc: '抛锚或站立越久伤害越高', cost: 68, minDifficulty: 3, tag: 'mechanic', apply: (p) => { p.mechanics.anchorShot += 1; } },
+  { id: 'shopAnchorWell', icon: '💧', name: '锚泉护符', desc: '锚定回血 +25%', cost: 42, minDifficulty: 1, apply: (p) => { p.anchorRegenMult = (p.anchorRegenMult || 1) * 1.25; } },
+  { id: 'shopTidalChain', icon: '⛓️', name: '潮汐链轮', desc: '锚区 +12% · 拉拽 +18%', cost: 55, minDifficulty: 2, apply: (p) => { p.anchorRadiusMult = (p.anchorRadiusMult || 1) * 1.12; p.anchorPullMult = (p.anchorPullMult || 1) * 1.18; } },
+  { id: 'shopHaulBoots', icon: '🌊', name: '收锚神行靴', desc: '收锚加速 +20% · 冷却 -15%', cost: 48, minDifficulty: 1, apply: (p) => { p.haulSpeedMult = (p.haulSpeedMult || 1) * 1.2; p.haulCooldownMult = (p.haulCooldownMult || 1) * 0.85; } },
+  { id: 'shopAnchorAmp', icon: '✨', name: '锚物核心', desc: '雷暴/箭塔/狂暴 +15%', cost: 72, minDifficulty: 3, apply: (p) => {
+    p.stormDamageMult = (p.stormDamageMult || 1) * 1.15;
+    p.towerDamageMult = (p.towerDamageMult || 1) * 1.15;
+    p.summonFrenzyMult = (p.summonFrenzyMult || 1) * 1.15;
+  } },
+  { id: 'shopGhostAnchor', icon: '👥', name: '幽灵锚核', desc: '幽灵锚点 +1 · +3 秒', cost: 65, minDifficulty: 3, apply: (p) => {
+    p.ghostAnchorMax = (p.ghostAnchorMax || ANCHOR_CONFIG.ghostAnchorMax) + 1;
+    p.ghostLifeBonus = (p.ghostLifeBonus || 0) + 3;
+  } },
   { id: 'shopMarkDetonate', icon: '💠', name: '引爆符文', desc: '印记 · 击杀引爆', cost: 92, minDifficulty: 4, tag: 'mechanic', apply: (p) => { p.mechanics.hexMark += 1; p.mechanics.markDetonate = 1; } },
   { id: 'shopElementFusion', icon: '🔮', name: '元素熔炉', desc: '点燃减速 · 诅咒增伤', cost: 98, minDifficulty: 4, tag: 'mechanic', apply: (p) => {
     p.mechanics.burnOnHit += 1;
@@ -1668,7 +1905,7 @@ function inferShopTag(item) {
   if (item.tag) return item.tag;
   const text = `${item.name}${item.desc}`;
   if (/恢复|回复|生命|再生|绷带|药水|口粮|滋养|灵药|灰烬/.test(text)) return 'heal';
-  if (/点燃|毒雾|圣环|荆棘|连锁|闪电|减速|处刑|脉冲|飞刃|爆炸|吸血|重伤|冻结|冲击|赏金|巨人|回旋|放血|永冻|贪婪|海克斯|土豆|机制|印记|熔火|灵魂|静电|时空|凤凰|弹射|诅咒|拾取|反击|旋风|锚定|引爆|元素|旋转/.test(text)) return 'mechanic';
+  if (/点燃|毒雾|圣环|荆棘|连锁|闪电|减速|处刑|脉冲|飞刃|爆炸|吸血|重伤|冻结|冲击|赏金|巨人|回旋|放血|永冻|贪婪|海克斯|土豆|机制|印记|熔火|灵魂|静电|时空|凤凰|弹射|诅咒|拾取|反击|旋风|锚定|锚域|锚物|雷锚|灵锚|幽灵|拉拽|收锚|引爆|元素|旋转/.test(text)) return 'mechanic';
   if (/伤害|攻速|暴击|投射|释放|攻击|猎杀|刃|锤|炮|连击|过载|湮灭|弑神/.test(text)) return 'offense';
   if (/护甲|护盾|盾|甲|壁垒|壳|重甲|圣盾/.test(text)) return 'defense';
   if (/金币|经验|招财|贪婪|藏宝|黄金|帝国|鸿运|学者/.test(text)) return 'economy';
@@ -1784,11 +2021,44 @@ function generateShopOffers(count = SHOP_OFFER_COUNT, difficultyLevel = 2, wave 
   return offers;
 }
 
-const WAVE_DURATION = 30;
+const WAVE_DURATION_BASE = 45;
+const WAVE_DURATION_GROWTH = 4;
+const WAVE_DURATION = WAVE_DURATION_BASE;
 const TOTAL_WAVES = 10;
+
+function getWaveDuration(wave = 1) {
+  const w = Math.max(1, Math.floor(wave || 1));
+  return WAVE_DURATION_BASE + (w - 1) * WAVE_DURATION_GROWTH;
+}
+
+function isMilestoneWave(wave = 1) {
+  const w = Math.max(1, Math.floor(wave || 1));
+  return w === 5 || w === 10;
+}
+
+function isTimedWave(wave = 1) {
+  return !isMilestoneWave(wave);
+}
+
+function getWaveTimeRemaining(waveTimer, wave = 1) {
+  if (!isTimedWave(wave)) return Infinity;
+  return Math.max(0, getWaveDuration(wave) - waveTimer);
+}
+
+function isWaveTimedOut(waveTimer, wave = 1) {
+  if (!isTimedWave(wave)) return false;
+  return waveTimer >= getWaveDuration(wave);
+}
 const GOLD_DROP_CHANCE = 0.58;
 const GOLD_REWARD_MULT = 1.0;
+const XP_REWARD_MULT = 0.82;
 const WAVE_GOLD_BONUS = 24;
+
+function getXpToNext(level) {
+  const lv = Math.max(1, Math.floor(level || 1));
+  if (lv === 1) return 18;
+  return Math.floor(16 + lv * 11 + lv * lv * 0.75);
+}
 
 const MIN_DIFFICULTY = 2;
 const MAX_DIFFICULTY = 8;
@@ -1820,6 +2090,8 @@ const DIFFICULTIES = (function buildDifficulties() {
         : i === MAX_DIFFICULTY ? '海量强敌，商店栏位最多'
         : `敌人强化 ${Math.round(t * 100)}% · 奖励 ${Math.round(rewardMult * 100)}%`,
       hpMult: 0.78 + Math.pow(t, 0.88) * 2.45,
+      minionHpMult: 0.88 + Math.pow(t, 0.72) * 3.85,
+      wave1MinionHpMult: i <= 4 ? 1 : Math.max(0.55, 1.35 - i * 0.1),
       dmgMult: 0.7 + t * 1.15,
       speedMult: 0.85 + t * 0.4,
       countMult: 0.75 + t * 1.1,

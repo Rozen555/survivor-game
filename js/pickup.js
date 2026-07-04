@@ -19,15 +19,17 @@ class Pickup {
     this.lifetime -= dt;
     this.wobble += dt * 4;
 
+    const pickupRange = player.getEffectivePickupRange?.() ?? player.pickupRange;
+
     const d = dist(this.x, this.y, player.x, player.y);
 
-    if (d < player.pickupRange) {
+    if (d < pickupRange) {
       this.magnetized = true;
     }
 
     if (this.magnetized) {
       const angle = Math.atan2(player.y - this.y, player.x - this.x);
-      const speed = Math.min(400, 200 + (player.pickupRange - d) * 3);
+      const speed = Math.min(400, 200 + (pickupRange - d) * 3);
       this.x += Math.cos(angle) * speed * dt;
       this.y += Math.sin(angle) * speed * dt;
     } else {

@@ -43,8 +43,9 @@ function applyMechanicDamageMods(dmg, enemy, m, player) {
   if (enemy.hexMark?.stacks > 0) {
     dmg = Math.floor(dmg * (1 + 0.07 * enemy.hexMark.stacks));
   }
-  if (m.anchorShot > 0 && player?.stillTime > 0.6) {
-    dmg = Math.floor(dmg * (1 + Math.min(0.4, player.stillTime * 0.05 * m.anchorShot)));
+  if (m.anchorShot > 0 && (player?.isAnchored?.() || player?.stillTime > 0.6)) {
+    const base = player.isAnchored?.() ? 0.55 : Math.min(0.4, player.stillTime * 0.05 * m.anchorShot);
+    dmg = Math.floor(dmg * (1 + base * m.anchorShot));
   }
   for (const buff of player?.tempBuffs || []) {
     if (buff.id === 'counter') dmg = Math.floor(dmg * 1.38);
@@ -410,9 +411,53 @@ const MECHANIC_UPGRADES = [
     id: 'anchorShot',
     name: '锚定狙击',
     icon: '🎯',
-    desc: '站立越久伤害越高',
+    desc: '抛锚或站立越久伤害越高',
     minDifficulty: 3,
     apply: (p) => { p.mechanics.anchorShot += 1; },
+  },
+  {
+    id: 'anchorBloom',
+    name: '锚域绽放',
+    icon: '🌸',
+    desc: '锚定回血 +0.8/s · 拉拽 +12%',
+    minDifficulty: 1,
+    apply: (p) => {
+      p.anchorRegenFlat = (p.anchorRegenFlat || 0) + 0.8;
+      p.anchorPullMult = (p.anchorPullMult || 1) * 1.12;
+    },
+  },
+  {
+    id: 'ghostLegion',
+    name: '幽灵军团',
+    icon: '👻',
+    desc: '幽灵锚点 +1 · 持续 +3 秒',
+    minDifficulty: 2,
+    apply: (p) => {
+      p.ghostAnchorMax = (p.ghostAnchorMax || ANCHOR_CONFIG.ghostAnchorMax) + 1;
+      p.ghostLifeBonus = (p.ghostLifeBonus || 0) + 3;
+    },
+  },
+  {
+    id: 'stormAnchor',
+    name: '雷锚导体',
+    icon: '⚡',
+    desc: '雷暴/箭塔伤害 +18%',
+    minDifficulty: 3,
+    apply: (p) => {
+      p.stormDamageMult = (p.stormDamageMult || 1) * 1.18;
+      p.towerDamageMult = (p.towerDamageMult || 1) * 1.18;
+    },
+  },
+  {
+    id: 'spiritAnchor',
+    name: '灵锚契约',
+    icon: '📜',
+    desc: '召唤狂暴 +15% · 锚定伤害 +8%',
+    minDifficulty: 3,
+    apply: (p) => {
+      p.summonFrenzyMult = (p.summonFrenzyMult || 1) * 1.15;
+      p.anchorDamageBonus = (p.anchorDamageBonus || 1) * 1.08;
+    },
   },
   {
     id: 'markDetonate',
@@ -528,7 +573,7 @@ class MechanicsSystem {
     }
 
     const moving = Math.hypot(player.vx, player.vy) > 18;
-    if (moving) {
+    if (moving && !player.isAnchored?.()) {
       player.stillTime = 0;
     } else {
       player.stillTime = (player.stillTime || 0) + dt;
@@ -1132,7 +1177,7 @@ class MechanicsSystem {
       ctx.restore();
     }
 
-    if (player.mechanics.anchorShot > 0 && player.stillTime > 0.6) {
+    if (player.mechanics.anchorShot > 0 && (player.isAnchored?.() || player.stillTime > 0.6)) {
       ctx.save();
       ctx.strokeStyle = '#fdcb6e';
       ctx.globalAlpha = Math.min(0.35, player.stillTime * 0.08);

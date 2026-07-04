@@ -40,6 +40,7 @@ class Game {
     this.announcement = null;
     this.modifierPickTotal = RUN_MODIFIER_PICK_COUNT;
 
+    this.anchor = new AnchorSystem();
     this.keys = {};
     this.setupInput();
   }
@@ -93,6 +94,7 @@ class Game {
     this.runModifiers = [];
     this.runModifierFx = mergeRunModifierEffects([]);
     this.mechanics = new MechanicsSystem(this);
+    this.anchor.reset();
 
     this.ui.hideAllScreens();
     this.ui.hideHud();
@@ -152,8 +154,10 @@ class Game {
       const def = SUMMON_TYPES[this.player.bonusStarterSummon];
       lines.push(`${def.icon} 初始同伴：${def.name}`);
     }
+    const anchorDef = this.player.getAnchorTypeDef();
+    lines.push(`${anchorDef.icon} ${anchorDef.name} · 漂流弱攻 · 按住 Shift 锚定回血`);
     if (lines.length) {
-      this.triggerAnnouncement(lines.join(' · '), lines.length > 1 ? '#fdcb6e' : '#a29bfe', 4.5);
+      this.triggerAnnouncement(lines.join(' · '), lines.length > 1 ? '#fdcb6e' : '#74b9ff', 5);
       if (this.player.bonusStarterSummon) Audio.play('summon');
     }
   }
@@ -180,7 +184,9 @@ class Game {
       this.player.moveInput.y /= len;
     }
 
+    this.anchor.handleInput(this.player, this.keys);
     this.player.update(dt, this.bounds);
+    this.anchor.update(dt, this.player, this.enemies, this.particles, this.bounds);
     if (this.player.hp > 0 && this.player.hp / this.player.maxHp < 0.25) {
       Audio.play('lowHp');
     }
@@ -258,16 +264,41 @@ class Game {
       if (this.camera.shake < 0.5) this.camera.shake = 0;
     }
 
-    // Wave complete -> shop (waves 1-9) or victory (wave 10)
-    if (this.waveTimer >= WAVE_DURATION && this.spawner.isWaveComplete() && this.enemies.length === 0) {
-      if (this.currentWave >= TOTAL_WAVES) {
+    // Wave ends when time runs out OR all spawned enemies are defeated;
+    // milestone waves (5 elite / 10 boss) have no timer and end on boss kill.
+    const wave = this.currentWave;
+    const timeUp = isWaveTimedOut(this.waveTimer, wave);
+    const allClear = !isMilestoneWave(wave)
+      && this.spawner.isWaveComplete()
+      && this.enemies.length === 0;
+    const eliteDefeated = wave === 5
+      && this.spawner.eliteSpawned
+      && !this.enemies.some(e => e.isElite);
+    const bossDefeated = wave === 10
+      && this.spawner.bossSpawned
+      && !this.enemies.some(e => e.isBoss);
+
+    if (timeUp || allClear || eliteDefeated || bossDefeated) {
+      if (bossDefeated) {
+        this.triggerAnnouncement('☠ Boss 击破！', '#ff7675', 3);
+      } else if (eliteDefeated) {
+        this.triggerAnnouncement('⚔ 精英击破！', '#fdcb6e', 2.5);
+      } else if (allClear) {
+        this.triggerAnnouncement('✅ 清场！', '#55efc4', 2);
+      } else if (timeUp) {
+        this.triggerAnnouncement('⏱ 时间到！', '#fdcb6e', 2);
+      }
+
+      if (bossDefeated) {
+        this.slayRemainingEnemies({ silent: true });
         this.collectAllPickups();
         this.state = GameState.VICTORY;
         Audio.play('victory');
-        this.ui.showGameOver(true, this.time, this.kills, this.player.level, this.currentWave, this.difficulty);
+        this.ui.showGameOver(true, this.time, this.kills, this.player.level, wave, this.difficulty);
         document.getElementById('gameover-title')?.replaceChildren(document.createTextNode('你已胜利'));
         return;
       }
+
       this.finishWave();
       return;
     }
@@ -288,31 +319,37 @@ class Game {
     Audio.play('announce');
   }
 
-  killEnemy(enemy) {
+  killEnemy(enemy, options = {}) {
+    const waveEnd = options.waveEnd || false;
+    const silent = options.silent || false;
+
     if (this.mechanics) this.mechanics.onKill(enemy, this.player);
 
     if (enemy.type === 'exploder') {
-      Audio.play('explode');
-      const r = enemy._def.explodeRadius || 70;
-      if (dist(enemy.x, enemy.y, this.player.x, this.player.y) < r + this.player.radius) {
-        const dmg = this.player.takeDamage(enemy._def.explodeDamage || 20);
-        if (dmg > 0) {
-          this.camera.shake = 8;
-          this.particles.hit(this.player.x, this.player.y, '#fdcb6e');
-          Audio.play('hurt');
+      if (!waveEnd) {
+        Audio.play('explode');
+        const r = enemy._def.explodeRadius || 70;
+        if (dist(enemy.x, enemy.y, this.player.x, this.player.y) < r + this.player.radius) {
+          const dmg = this.player.takeDamage(enemy._def.explodeDamage || 20);
+          if (dmg > 0) {
+            this.camera.shake = 8;
+            this.particles.hit(this.player.x, this.player.y, '#fdcb6e');
+            Audio.play('hurt');
+          }
+        }
+        for (let i = 0; i < 12; i++) {
+          const r = enemy._def.explodeRadius || 70;
+          this.particles.hit(
+            enemy.x + randomRange(-r, r) * 0.3,
+            enemy.y + randomRange(-r, r) * 0.3,
+            '#ffeaa7'
+          );
         }
       }
       this.particles.death(enemy.x, enemy.y, '#fdcb6e');
-      for (let i = 0; i < 12; i++) {
-        this.particles.hit(
-          enemy.x + randomRange(-r, r) * 0.3,
-          enemy.y + randomRange(-r, r) * 0.3,
-          '#ffeaa7'
-        );
-      }
     }
 
-    if (enemy.type === 'splitter') {
+    if (!waveEnd && enemy.type === 'splitter') {
       Audio.play('split');
       const count = enemy._def.splitCount || 2;
       for (let i = 0; i < count; i++) {
@@ -329,12 +366,14 @@ class Game {
     }
 
     this.kills++;
-    if (enemy.isBoss) {
-      // boss death fanfare handled below
-    } else if (enemy.isElite) {
-      Audio.play('eliteKill');
-    } else {
-      Audio.play('kill');
+    if (!silent) {
+      if (enemy.isBoss) {
+        // boss death fanfare handled below
+      } else if (enemy.isElite) {
+        Audio.play('eliteKill');
+      } else {
+        Audio.play('kill');
+      }
     }
     if (this.player.lifesteal > 0) {
       this.player.hp = Math.min(this.player.hp + this.player.lifesteal, this.player.maxHp);
@@ -356,20 +395,31 @@ class Game {
       this.camera.shake = Math.max(this.camera.shake || 0, 5);
     }
     if (enemy.isBoss) {
-      for (let i = 0; i < 24; i++) {
-        const a = (i / 24) * TAU;
-        this.particles.hit(
-          enemy.x + Math.cos(a) * (enemy.radius + 20),
-          enemy.y + Math.sin(a) * (enemy.radius + 10),
-          enemy._def.auraColor || enemy.color
-        );
+      if (!waveEnd) {
+        for (let i = 0; i < 24; i++) {
+          const a = (i / 24) * TAU;
+          this.particles.hit(
+            enemy.x + Math.cos(a) * (enemy.radius + 20),
+            enemy.y + Math.sin(a) * (enemy.radius + 10),
+            enemy._def.auraColor || enemy.color
+          );
+        }
+        this.camera.shake = Math.max(this.camera.shake || 0, 14);
       }
-      this.camera.shake = Math.max(this.camera.shake || 0, 14);
-      Audio.play('boss');
+      if (!silent) Audio.play('boss');
     }
     if (enemy.type !== 'exploder') {
       this.particles.death(enemy.x, enemy.y, enemy.color);
     }
+  }
+
+  slayRemainingEnemies(options = {}) {
+    const remaining = this.enemies.splice(0);
+    for (const enemy of remaining) {
+      this.killEnemy(enemy, { waveEnd: true, silent: options.silent ?? true });
+    }
+    this.enemyProjectiles = [];
+    return remaining.length;
   }
 
   spawnBonusDrops(enemy) {
@@ -567,6 +617,10 @@ class Game {
   }
 
   finishWave() {
+    const slain = this.slayRemainingEnemies({ silent: true });
+    if (slain > 0) {
+      this.triggerAnnouncement(`💎 波次结算 · ${slain} 只`, '#ffd93d', 1.8);
+    }
     const leveled = this.collectAllPickups();
     if (leveled) {
       this.triggerLevelUp(true);
@@ -1096,6 +1150,7 @@ class Game {
       this.summons.draw(ctx);
       this.weapons.draw(ctx, this.player);
       if (this.mechanics) this.mechanics.draw(ctx);
+      this.anchor.draw(ctx, this.player);
       this.player.draw(ctx);
     }
 
@@ -1115,17 +1170,39 @@ class Game {
   }
 
   drawWaveInfo(ctx) {
-    const waveProgress = Math.min(1, this.waveTimer / WAVE_DURATION);
+    const wave = this.currentWave;
+    if (isMilestoneWave(wave)) {
+      const goal = wave === 5 ? '击败精英' : '击败 Boss';
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.fillRect(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT - 20, 200, 8);
+      ctx.fillStyle = wave === 5 ? '#fdcb6e' : '#ff7675';
+      ctx.fillRect(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT - 20, 200, 8);
+      ctx.fillStyle = '#bbb';
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(
+        `波次 ${wave}/${TOTAL_WAVES} · 无时限 · ${goal} · 难度 ${this.difficulty.level}`,
+        CANVAS_WIDTH / 2,
+        CANVAS_HEIGHT - 28
+      );
+      return;
+    }
+
+    const waveDuration = getWaveDuration(wave);
+    const remaining = getWaveTimeRemaining(this.waveTimer, wave);
+    const remainingRatio = Math.max(0, remaining / waveDuration);
+    const urgent = remaining <= 10;
+
     ctx.fillStyle = 'rgba(0,0,0,0.4)';
     ctx.fillRect(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT - 20, 200, 8);
-    ctx.fillStyle = '#ffd93d';
-    ctx.fillRect(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT - 20, 200 * waveProgress, 8);
+    ctx.fillStyle = urgent ? '#ff6b6b' : '#ffd93d';
+    ctx.fillRect(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT - 20, 200 * remainingRatio, 8);
 
-    ctx.fillStyle = '#888';
+    ctx.fillStyle = urgent ? '#ff6b6b' : '#888';
     ctx.font = '12px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(
-      `波次 ${this.currentWave}/${TOTAL_WAVES} · 难度 ${this.difficulty.level}`,
+      `波次 ${wave}/${TOTAL_WAVES} · 剩余 ${Math.ceil(remaining)}s · 难度 ${this.difficulty.level}`,
       CANVAS_WIDTH / 2,
       CANVAS_HEIGHT - 28
     );

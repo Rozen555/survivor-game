@@ -41,6 +41,16 @@ function formatTime(seconds) {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
+function distPointToSegment(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const lenSq = dx * dx + dy * dy;
+  if (lenSq < 0.001) return dist(px, py, x1, y1);
+  let t = ((px - x1) * dx + (py - y1) * dy) / lenSq;
+  t = clamp(t, 0, 1);
+  return dist(px, py, x1 + t * dx, y1 + t * dy);
+}
+
 function circleOverlap(x1, y1, r1, x2, y2, r2) {
   return dist(x1, y1, x2, y2) < r1 + r2;
 }

@@ -80,18 +80,43 @@ class SummonEntity {
     const hpRatio = this.maxHp > 0 ? this.hp / this.maxHp : 1;
     const statScale = this.def.isUltimate ? 1.35 : 1.12;
     const hpScale = (1 + (this.level - 1) * 0.28) * statScale;
-    const dmgScale = (1 + (this.level - 1) * 0.22) * (player.damageMult || 1) * (player.summonDamageMult || 1);
+    const summonMult = player.summonDamageMult || 1;
+    const dmgScale = (1 + (this.level - 1) * 0.22) * (player.damageMult || 1) * summonMult;
     this.maxHp = Math.floor(this.def.hp * hpScale);
     this.hp = Math.max(1, Math.min(this.maxHp, Math.floor(this.maxHp * hpRatio)));
     this.damage = Math.floor(this.def.damage * dmgScale);
     this.speed = (this.def.speed || 0) * (1 + (this.level - 1) * 0.08);
   }
 
+  scaledDamage(player, mult = 1) {
+    const stateMult = player.isAnchored?.()
+      ? (player.getAnchorTypeDef().summonBoost || 1) * (player.summonBoostMult || 1)
+      : ANCHOR_CONFIG.driftDamageMult;
+    return Math.floor(this.damage * mult * stateMult);
+  }
+
+  _summonFrenzyMult(player) {
+    if (!player?.isAnchored?.()) return 1;
+    const base = player.getAnchorTypeDef()?.summonFrenzySpeed || 1;
+    return base > 1 ? base * (player.summonFrenzyMult || 1) : 1;
+  }
+
+  _frenzyDt(dt) {
+    return dt * (this.frenzyMult || 1);
+  }
+
+  _frenzyCd(cd) {
+    const mult = this.frenzyMult || 1;
+    return mult > 1 ? cd / mult : cd;
+  }
+
   getHomePosition(player) {
+    const cx = player.isAnchored?.() ? player.anchorX : player.x;
+    const cy = player.isAnchored?.() ? player.anchorY : player.y;
     const angle = this.orbitAngle + player.facing * 0.15;
     return {
-      x: player.x + Math.cos(angle) * this.orbitDist,
-      y: player.y + Math.sin(angle) * this.orbitDist,
+      x: cx + Math.cos(angle) * this.orbitDist,
+      y: cy + Math.sin(angle) * this.orbitDist,
     };
   }
 
@@ -125,7 +150,7 @@ class SummonEntity {
     this.x = home.x;
     this.y = home.y;
 
-    this.cooldown -= dt;
+    this.cooldown -= this._frenzyDt(dt);
     if (this.cooldown > 0 || enemies.length === 0) return;
 
     const target = this.findNearest(enemies, this, this.def.range);
@@ -136,11 +161,11 @@ class SummonEntity {
     system.projectiles.push(new SummonProjectile(
       this.x, this.y, angle,
       420 + this.level * 15,
-      this.damage,
+      this.scaledDamage(player),
       this.def.projColor || this.def.color,
       5 + Math.floor(this.level / 3)
     ));
-    this.cooldown = this.def.shootCd * Math.max(0.45, 1 - (this.level - 1) * 0.06);
+    this.cooldown = this._frenzyCd(this.def.shootCd * Math.max(0.45, 1 - (this.level - 1) * 0.06));
   }
 
   updateMelee(dt, player, enemies, bounds, system, particles) {
@@ -161,12 +186,12 @@ class SummonEntity {
     this.x = clamp(this.x, this.radius, bounds.width - this.radius);
     this.y = clamp(this.y, this.radius, bounds.height - this.radius);
 
-    this.cooldown -= dt;
+    this.cooldown -= this._frenzyDt(dt);
     if (this.cooldown > 0) return;
 
     for (const enemy of enemies) {
       if (dist(this.x, this.y, enemy.x, enemy.y) < this.def.attackRange + enemy.radius) {
-        enemy.takeDamage(this.damage, this.x, this.y);
+        enemy.takeDamage(this.scaledDamage(player), this.x, this.y);
         if (this.def.slowOnHit) {
           enemy.slow = {
             mult: 0.68,
@@ -175,7 +200,7 @@ class SummonEntity {
         }
         particles.hit(enemy.x, enemy.y, this.def.color);
         this.flash = 0.12;
-        this.cooldown = this.def.attackCd * Math.max(0.5, 1 - (this.level - 1) * 0.05);
+        this.cooldown = this._frenzyCd(this.def.attackCd * Math.max(0.5, 1 - (this.level - 1) * 0.05));
         break;
       }
     }
@@ -195,7 +220,7 @@ class SummonEntity {
 
       for (const enemy of enemies) {
         if (dist(this.x, this.y, enemy.x, enemy.y) < this.radius + enemy.radius) {
-          enemy.takeDamage(this.damage, this.x, this.y);
+          enemy.takeDamage(this.scaledDamage(player), this.x, this.y);
           particles.hit(enemy.x, enemy.y, this.def.color);
         }
       }
@@ -206,11 +231,11 @@ class SummonEntity {
 
     const target = this.findNearest(enemies, player, this.leash + 60);
     if (target && dist(this.x, this.y, player.x, player.y) < this.leash) {
-      this.chargeTimer -= dt;
+      this.chargeTimer -= this._frenzyDt(dt);
       if (this.chargeTimer <= 0) {
         this.charging = true;
         this.chargeTime = 0.35;
-        this.chargeTimer = this.def.chargeCd;
+        this.chargeTimer = this._frenzyCd(this.def.chargeCd);
         const angle = angleBetween(this.x, this.y, target.x, target.y);
         this.facing = angle;
         this.chargeDir.x = Math.cos(angle);
@@ -244,14 +269,14 @@ class SummonEntity {
     this.x = clamp(this.x, this.radius, bounds.width - this.radius);
     this.y = clamp(this.y, this.radius, bounds.height - this.radius);
 
-    this.cooldown -= dt;
+    this.cooldown -= this._frenzyDt(dt);
     if (this.cooldown > 0) return;
 
     const aoe = this.def.aoeRadius * (1 + (this.level - 1) * 0.05);
     let hit = false;
     for (const enemy of enemies) {
       if (dist(this.x, this.y, enemy.x, enemy.y) < aoe + enemy.radius) {
-        enemy.takeDamage(Math.floor(this.damage * 0.92), this.x, this.y);
+        enemy.takeDamage(this.scaledDamage(player, 0.92), this.x, this.y);
         particles.hit(enemy.x, enemy.y, this.def.color);
         hit = true;
       }
@@ -262,7 +287,7 @@ class SummonEntity {
         x: this.x, y: this.y, radius: aoe,
         color: this.def.color, life: 0.3, maxLife: 0.3,
       });
-      this.cooldown = this.def.attackCd * Math.max(0.55, 1 - (this.level - 1) * 0.04);
+      this.cooldown = this._frenzyCd(this.def.attackCd * Math.max(0.55, 1 - (this.level - 1) * 0.04));
     }
   }
 
@@ -275,7 +300,7 @@ class SummonEntity {
     this.x = home.x + Math.cos(orbitT * 2) * 12;
     this.y = home.y + Math.sin(orbitT * 2) * 8;
 
-    this.cooldown -= dt;
+    this.cooldown -= this._frenzyDt(dt);
     if (this.cooldown > 0 || enemies.length === 0) return;
 
     const target = this.findNearest(enemies, this, this.def.shootRange);
@@ -286,11 +311,11 @@ class SummonEntity {
     system.projectiles.push(new SummonProjectile(
       this.x, this.y, angle,
       this.def.projSpeed,
-      this.damage,
+      this.scaledDamage(player),
       this.def.projColor || this.def.color,
       4
     ));
-    this.cooldown = this.def.shootCd * Math.max(0.5, 1 - (this.level - 1) * 0.05);
+    this.cooldown = this._frenzyCd(this.def.shootCd * Math.max(0.5, 1 - (this.level - 1) * 0.05));
   }
 
   updateChain(dt, player, enemies, bounds, system, particles) {
@@ -301,7 +326,7 @@ class SummonEntity {
     this.x = home.x + Math.cos(orbitT * 3) * 16;
     this.y = home.y + Math.sin(orbitT * 2) * 10 - 8;
 
-    this.cooldown -= dt;
+    this.cooldown -= this._frenzyDt(dt);
     if (this.cooldown > 0 || enemies.length === 0) return;
 
     const target = this.findNearest(enemies, this, this.def.chainRange || 240);
@@ -318,7 +343,7 @@ class SummonEntity {
       if (!current || hit.has(current.id)) break;
       hit.add(current.id);
       const mult = i === 0 ? 1 : Math.max(0.35, 0.58 - (i - 1) * 0.12);
-      current.takeDamage(Math.floor(this.damage * mult), fromX, fromY);
+      current.takeDamage(this.scaledDamage(player, mult), fromX, fromY);
       particles.hit(current.x, current.y, this.def.color);
       points.push({ x: current.x, y: current.y });
 
@@ -341,7 +366,7 @@ class SummonEntity {
       system.chainEffects.push({ points, life: 0.22, color: this.def.color || '#ffeaa7' });
       this.flash = 0.15;
     }
-    this.cooldown = this.def.chainCd * Math.max(0.5, 1 - (this.level - 1) * 0.05);
+    this.cooldown = this._frenzyCd(this.def.chainCd * Math.max(0.5, 1 - (this.level - 1) * 0.05));
   }
 
   updateDragon(dt, player, enemies, bounds, system, particles) {
@@ -366,11 +391,11 @@ class SummonEntity {
       this.facing = angleBetween(this.x, this.y, target.x, target.y);
     }
 
-    this.breathTimer -= dt;
+    this.breathTimer -= this._frenzyDt(dt);
     if (this.breathTimer <= 0 && target) {
       const range = this.def.breathRange;
       const halfArc = this.def.breathArc;
-      const breathDmg = Math.floor(this.damage * 1.0);
+      const breathDmg = this.scaledDamage(player, 1.0);
       for (const enemy of enemies) {
         const d = dist(this.x, this.y, enemy.x, enemy.y);
         if (d > range + enemy.radius) continue;
@@ -394,17 +419,17 @@ class SummonEntity {
         life: 0.28,
         maxLife: 0.28,
       });
-      this.breathTimer = this.def.breathCd * Math.max(0.55, 1 - (this.level - 1) * 0.04);
+      this.breathTimer = this._frenzyCd(this.def.breathCd * Math.max(0.55, 1 - (this.level - 1) * 0.04));
       this.flash = 0.18;
     }
 
-    this.stompTimer -= dt;
+    this.stompTimer -= this._frenzyDt(dt);
     if (this.stompTimer <= 0) {
       const aoe = this.def.aoeRadius * (1 + (this.level - 1) * 0.04);
       let hit = false;
       for (const enemy of enemies) {
         if (dist(this.x, this.y, enemy.x, enemy.y) < aoe + enemy.radius) {
-          enemy.takeDamage(Math.floor(this.damage * 0.88), this.x, this.y);
+          enemy.takeDamage(this.scaledDamage(player, 0.88), this.x, this.y);
           particles.hit(enemy.x, enemy.y, this.def.coreColor || '#fdcb6e');
           hit = true;
         }
@@ -416,25 +441,27 @@ class SummonEntity {
         });
         this.flash = 0.22;
       }
-      this.stompTimer = this.def.stompCd * Math.max(0.6, 1 - (this.level - 1) * 0.03);
+      this.stompTimer = this._frenzyCd(this.def.stompCd * Math.max(0.6, 1 - (this.level - 1) * 0.03));
     }
 
-    this.cooldown -= dt;
+    this.cooldown -= this._frenzyDt(dt);
     if (this.cooldown <= 0 && target) {
       const angle = angleBetween(this.x, this.y, target.x, target.y);
       system.projectiles.push(new SummonProjectile(
         this.x, this.y - 4, angle,
         this.def.projSpeed,
-        Math.floor(this.damage * 0.82),
+        this.scaledDamage(player, 0.82),
         this.def.projColor || '#ff7675',
         7,
         this.def.projAoe || 0
       ));
-      this.cooldown = this.def.shootCd * Math.max(0.5, 1 - (this.level - 1) * 0.04);
+      this.cooldown = this._frenzyCd(this.def.shootCd * Math.max(0.5, 1 - (this.level - 1) * 0.04));
     }
   }
 
   update(dt, player, enemies, bounds, system, particles) {
+    this.frenzyMult = this._summonFrenzyMult(player);
+    this.frenzyActive = this.frenzyMult > 1;
     this.wobble += dt * 4;
     if (this.flash > 0) this.flash -= dt;
 
@@ -450,6 +477,21 @@ class SummonEntity {
   }
 
   draw(ctx) {
+    if (this.frenzyActive) {
+      const pulse = 0.7 + Math.sin(this.wobble * 2.2) * 0.2;
+      ctx.save();
+      ctx.strokeStyle = '#e84393';
+      ctx.globalAlpha = 0.22 + pulse * 0.12;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius + 8 + pulse * 3, 0, TAU);
+      ctx.stroke();
+      ctx.fillStyle = '#a29bfe';
+      ctx.globalAlpha = 0.08;
+      ctx.fill();
+      ctx.restore();
+    }
+
     if (Sprites.ready && Sprites.drawSummon(ctx, this)) return;
 
     const bob = Math.sin(this.wobble) * 1.5;

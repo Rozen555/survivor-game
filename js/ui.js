@@ -17,6 +17,7 @@ class UI {
     this.levelText = document.getElementById('level-text');
     this.timerText = document.getElementById('timer-text');
     this.killCount = document.getElementById('kill-count');
+    this.anchorStatus = document.getElementById('anchor-status-text');
     this.weaponsDisplay = document.getElementById('weapons-display');
     this.upgradeOptions = document.getElementById('upgrade-options');
     this.levelupSubtitle = document.getElementById('levelup-subtitle');
@@ -46,7 +47,7 @@ class UI {
       this.diffDescEl.textContent =
         `怪物 ${d.enemyTypeCount} 种 · 奖励 ${d.rewardTypeCount} 种 · ` +
         `商店 ${d.shopSlots} 栏 · 奖励 ×${d.rewardMult.toFixed(2)} · ` +
-        `敌人 HP×${d.hpMult.toFixed(2)} 伤害×${d.dmgMult.toFixed(2)} · ` +
+        `敌人 小怪HP×${d.minionHpMult.toFixed(2)} 伤害×${d.dmgMult.toFixed(2)} · ` +
         `数量×${d.countMult.toFixed(2)}`;
     };
 
@@ -116,6 +117,33 @@ class UI {
       } else {
         modEl.textContent = '';
         modEl.classList.add('hidden');
+      }
+    }
+
+    if (this.anchorStatus) {
+      const def = player.getAnchorTypeDef?.();
+      if (player.anchorState === 'anchored') {
+        if (def?.id === 'spirit' && def.summonFrenzySpeed > 1) {
+          const pct = Math.round((def.summonFrenzySpeed - 1) * 100);
+          this.anchorStatus.textContent = `${def?.icon || '👻'} 狂暴 +${pct}%攻速`;
+        } else {
+          const regen = ANCHOR_CONFIG.anchoredRegen + (def?.regenBonus || 0);
+          this.anchorStatus.textContent = `${def?.icon || '⚓'} 锚定 +${regen}/s`;
+        }
+        this.anchorStatus.parentElement?.classList.add('anchored');
+        this.anchorStatus.parentElement?.classList.remove('hauling', 'drift');
+      } else if (player.anchorState === 'hauling') {
+        this.anchorStatus.textContent = '🌊 收锚';
+        this.anchorStatus.parentElement?.classList.add('hauling');
+        this.anchorStatus.parentElement?.classList.remove('anchored', 'drift');
+      } else if (player.haulCooldown > 0) {
+        this.anchorStatus.textContent = `⏳ ${player.haulCooldown.toFixed(1)}s`;
+        this.anchorStatus.parentElement?.classList.add('drift');
+        this.anchorStatus.parentElement?.classList.remove('anchored', 'hauling');
+      } else {
+        this.anchorStatus.textContent = '🌊 漂流 · 弱攻';
+        this.anchorStatus.parentElement?.classList.add('drift');
+        this.anchorStatus.parentElement?.classList.remove('anchored', 'hauling');
       }
     }
   }

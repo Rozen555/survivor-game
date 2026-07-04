@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>幸存者 · Survivor</title>
-  <link rel="stylesheet" href="style.css?v=20260704n">
+  <link rel="stylesheet" href="style.css?v=20260704o">
 </head>
 <body>
   <div id="game-container">
@@ -21,24 +21,49 @@
             <button class="char-btn selected" data-char="warrior">
               <span class="char-icon">⚔️</span>
               <span class="char-name">战士</span>
-              <span class="char-desc">近战 · 顺劈/盾波</span>
+              <span class="char-desc">近战 · 顺劈/盾波 · ⚓铁锚</span>
             </button>
             <button class="char-btn" data-char="mage">
               <span class="char-icon">🔮</span>
               <span class="char-name">法师</span>
-              <span class="char-desc">魔法 · 冰箭/陨石</span>
+              <span class="char-desc">魔法 · 冰箭/陨石 · ⚡雷暴锚</span>
             </button>
             <button class="char-btn" data-char="ranger">
               <span class="char-icon">🏹</span>
               <span class="char-name">游侠</span>
-              <span class="char-desc">投射 · 连射/爆炸箭</span>
+              <span class="char-desc">投射 · 连射/爆炸箭 · 🏹箭塔锚</span>
             </button>
             <button class="char-btn" data-char="summoner">
               <span class="char-icon">🧙</span>
               <span class="char-name">召唤师</span>
-              <span class="char-desc">法阵 · 开局双召唤 · 七种召龙</span>
+              <span class="char-desc">法阵 · 双召唤 · 👻狂暴锚</span>
             </button>
           </div>
+        </div>
+        <div class="anchor-guide">
+          <h2>⚓ 锚定机制</h2>
+          <p class="anchor-guide-lead">按住 <kbd>Shift</kbd> 抛锚 · 松开收锚 — 核心战斗循环</p>
+          <div class="anchor-states">
+            <div class="anchor-state drift">
+              <span class="anchor-state-title">🌊 漂流</span>
+              <span>伤害 ×0.35 · 范围/攻速降低 · 可自由移动</span>
+            </div>
+            <div class="anchor-state anchored">
+              <span class="anchor-state-title">⚓ 锚定</span>
+              <span>伤害正常 · 回血 2.5/s · 敌人被拉向锚点</span>
+            </div>
+            <div class="anchor-state haul">
+              <span class="anchor-state-title">🌊 收锚</span>
+              <span>短暂加速 + 无敌 · 留下幽灵锚影</span>
+            </div>
+          </div>
+          <ul class="anchor-types">
+            <li><strong>⚔️ 战士 · 铁锚</strong> 锚定护甲 +2 · 额外回血</li>
+            <li><strong>🔮 法师 · 雷锚</strong> 圈内持续雷暴 + 减速</li>
+            <li><strong>🏹 游侠 · 磁锚</strong> 部署箭塔 · 拾取范围扩大</li>
+            <li><strong>🧙 召唤师 · 灵锚</strong> 召唤物狂暴 · 攻速 +40%</li>
+          </ul>
+          <p class="anchor-guide-note">升级时可抽取通用锚定强化与各职业专属锚定奖励</p>
         </div>
         <div class="difficulty-select">
           <h2>选择难度 <span class="diff-range">2 – 8</span></h2>
@@ -58,7 +83,7 @@
         <p id="asset-status" class="asset-warn">正在加载素材…</p>
         <p class="asset-hint">若角色变成方块小人：双击 <code>copy-assets.bat</code> 复制骑士 PNG，再 Ctrl+F5 刷新</p>
         <div class="controls-hint">
-          <p>WASD / 方向键 移动 · 空格 暂停 · 开局与升级均为三选一</p>
+          <p>WASD / 方向键 移动 · Shift 锚定回血/满攻 · 漂流弱攻 · 空格 暂停</p>
         </div>
       </div>
     </div>
@@ -88,6 +113,9 @@
         </div>
         <div class="hud-stat difficulty-hud">
           <span id="difficulty-hud">难2</span>
+        </div>
+        <div id="anchor-status" class="hud-stat anchor-status" title="锚定状态">
+          <span id="anchor-status-text">🌊 漂流</span>
         </div>
       </div>
       <div id="weapons-display" class="weapons-display"></div>
@@ -168,20 +196,21 @@
     </div>
   </div>
 
-  <script src="js/utils.js?v=20260704n"></script>
-  <script src="js/config.js?v=20260704n"></script>
-  <script src="js/mechanics.js?v=20260704n"></script>
-  <script src="js/audio.js?v=20260704n"></script>
-  <script src="js/knight-sprites.js?v=20260704n"></script>
-  <script src="js/sprites.js?v=20260704n"></script>
-  <script src="js/player.js?v=20260704n"></script>
-  <script src="js/enemy.js?v=20260704n"></script>
-  <script src="js/weapon.js?v=20260704n"></script>
-  <script src="js/summon.js?v=20260704n"></script>
-  <script src="js/pickup.js?v=20260704n"></script>
-  <script src="js/background.js?v=20260704n"></script>
-  <script src="js/ui.js?v=20260704n"></script>
-  <script src="js/game.js?v=20260704n"></script>
-  <script src="js/main.js?v=20260704n"></script>
+  <script src="js/utils.js?v=20260704o"></script>
+  <script src="js/config.js?v=20260704o"></script>
+  <script src="js/mechanics.js?v=20260704o"></script>
+  <script src="js/audio.js?v=20260704o"></script>
+  <script src="js/knight-sprites.js?v=20260704o"></script>
+  <script src="js/sprites.js?v=20260704o"></script>
+  <script src="js/player.js?v=20260704o"></script>
+  <script src="js/anchor.js?v=20260704o"></script>
+  <script src="js/enemy.js?v=20260704o"></script>
+  <script src="js/weapon.js?v=20260704o"></script>
+  <script src="js/summon.js?v=20260704o"></script>
+  <script src="js/pickup.js?v=20260704o"></script>
+  <script src="js/background.js?v=20260704o"></script>
+  <script src="js/ui.js?v=20260704o"></script>
+  <script src="js/game.js?v=20260704o"></script>
+  <script src="js/main.js?v=20260704o"></script>
 </body>
 </html>
