@@ -24,6 +24,11 @@ class Player {
     this.bonusProjectiles = 0;
     this.goldMult = 1;
     this.summonDamageMult = 1;
+    this.mechanics = createDefaultMechanics();
+    this.killCombo = 0;
+    this.killComboTimer = 0;
+    this.tempBuffs = [];
+    this.stillTime = 0;
 
     this.vx = 0;
     this.vy = 0;
@@ -37,6 +42,8 @@ class Player {
     this.level = 1;
     this.xpToNext = 10;
     this.gold = 0;
+
+    this.upgradeHistory = {};
 
     this.moveInput = { x: 0, y: 0 };
   }
@@ -71,6 +78,34 @@ class Player {
     if (this.invincible > 0) {
       this.invincible -= dt;
     }
+  }
+
+  getAttackSpeedMult() {
+    let mult = this.attackSpeedMult || 1;
+    if (this.killCombo > 0 && this.mechanics?.killStreak > 0) {
+      mult *= 1 + Math.min(0.55, this.killCombo * 0.035);
+    }
+    for (const buff of this.tempBuffs) {
+      if (buff.id === 'frenzy') mult *= 1.25;
+    }
+    return mult;
+  }
+
+  getDamageMult() {
+    let mult = this.damageMult || 1;
+    for (const buff of this.tempBuffs) {
+      if (buff.id === 'frenzy') mult *= 1.15;
+    }
+    return mult;
+  }
+
+  addTempBuff(id, duration) {
+    const existing = this.tempBuffs.find(b => b.id === id);
+    if (existing) {
+      existing.time = Math.max(existing.time, duration);
+      return;
+    }
+    this.tempBuffs.push({ id, time: duration });
   }
 
   takeDamage(amount) {

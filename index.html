@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>幸存者 · Survivor</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20260704">
 </head>
 <body>
   <div id="game-container">
@@ -58,7 +58,7 @@
         <p id="asset-status" class="asset-warn">正在加载素材…</p>
         <p class="asset-hint">若角色变成方块小人：双击 <code>copy-assets.bat</code> 复制骑士 PNG，再 Ctrl+F5 刷新</p>
         <div class="controls-hint">
-          <p>WASD / 方向键 移动 · 空格 暂停 · 鼠标 选择升级</p>
+          <p>WASD / 方向键 移动 · 空格 暂停 · 开局与升级均为三选一</p>
         </div>
       </div>
     </div>
@@ -91,14 +91,33 @@
         </div>
       </div>
       <div id="weapons-display" class="weapons-display"></div>
+      <div id="run-modifiers-hud" class="run-modifiers-hud hidden"></div>
     </div>
 
     <!-- 升级选择 -->
     <div id="levelup-screen" class="screen hidden">
-      <div class="levelup-content">
-        <h2>升级！</h2>
-        <p>选择一项强化</p>
+      <div class="levelup-panel">
+        <div class="levelup-header">
+          <div class="levelup-header-glow"></div>
+          <span class="levelup-badge">LEVEL UP</span>
+          <h2 class="levelup-title">升级！</h2>
+          <p id="levelup-subtitle" class="levelup-subtitle">选择一项强化</p>
+        </div>
         <div id="upgrade-options" class="upgrade-options"></div>
+      </div>
+    </div>
+
+    <!-- 开局词缀三选一 -->
+    <div id="modifier-pick-screen" class="screen hidden">
+      <div class="levelup-panel modifier-pick-panel">
+        <div class="levelup-header">
+          <div class="levelup-header-glow modifier-glow"></div>
+          <span class="levelup-badge modifier-badge">RUN BLESSING</span>
+          <h2 class="levelup-title">选择本局词缀</h2>
+          <p id="modifier-pick-subtitle" class="levelup-subtitle">第 1 / 2 个词缀 · 三选一</p>
+          <p id="modifier-pick-hint" class="modifier-pick-hint">难度越高，第二轮可出现混合词缀</p>
+        </div>
+        <div id="modifier-options" class="upgrade-options"></div>
       </div>
     </div>
 
@@ -123,10 +142,10 @@
       </div>
     </div>
 
-    <!-- 游戏结束 -->
+    <!-- 死亡 / 胜利结算 -->
     <div id="gameover-screen" class="screen hidden">
       <div class="gameover-content">
-        <h2 id="gameover-title">游戏结束</h2>
+        <h2 id="gameover-title" class="defeat">你已死亡</h2>
         <div class="stats-summary">
           <p>存活时间: <span id="final-time">00:00</span></p>
           <p>击杀数: <span id="final-kills">0</span></p>
@@ -149,19 +168,20 @@
     </div>
   </div>
 
-  <script src="js/utils.js"></script>
-  <script src="js/config.js"></script>
-  <script src="js/audio.js"></script>
-  <script src="js/knight-sprites.js"></script>
-  <script src="js/sprites.js"></script>
-  <script src="js/player.js"></script>
-  <script src="js/enemy.js"></script>
-  <script src="js/weapon.js"></script>
-  <script src="js/summon.js"></script>
-  <script src="js/pickup.js"></script>
-  <script src="js/background.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/game.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/utils.js?v=20260704"></script>
+  <script src="js/config.js?v=20260704"></script>
+  <script src="js/mechanics.js?v=20260704"></script>
+  <script src="js/audio.js?v=20260704"></script>
+  <script src="js/knight-sprites.js?v=20260704"></script>
+  <script src="js/sprites.js?v=20260704"></script>
+  <script src="js/player.js?v=20260704"></script>
+  <script src="js/enemy.js?v=20260704"></script>
+  <script src="js/weapon.js?v=20260704"></script>
+  <script src="js/summon.js?v=20260704"></script>
+  <script src="js/pickup.js?v=20260704"></script>
+  <script src="js/background.js?v=20260704"></script>
+  <script src="js/ui.js?v=20260704"></script>
+  <script src="js/game.js?v=20260704"></script>
+  <script src="js/main.js?v=20260704"></script>
 </body>
 </html>

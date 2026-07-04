@@ -22,6 +22,7 @@ class Projectile {
     this.trail = [];
     this.shape = config.shape || null;
     this.trailRate = 0;
+    this.isCrit = config.isCrit || false;
   }
 
   update(dt, enemies, player) {
@@ -170,13 +171,22 @@ class WeaponInstance {
   }
 
   getDamage(player) {
+    return this.rollDamage(player).damage;
+  }
+
+  rollDamage(player) {
     const base = this.def.damage * (1 + (this.level - 1) * 0.2);
-    const crit = Math.random() < player.critChance ? 2 : 1;
-    return Math.floor(base * player.damageMult * crit);
+    const crit = Math.random() < player.critChance;
+    const mult = crit ? 2 : 1;
+    const dmgMult = player.getDamageMult?.() ?? player.damageMult ?? 1;
+    return {
+      damage: Math.floor(base * dmgMult * mult),
+      crit,
+    };
   }
 
   getCooldown(player) {
-    const mult = player.attackSpeedMult || 1;
+    const mult = (player.getAttackSpeedMult?.() ?? player.attackSpeedMult) || 1;
     return this.def.cooldown * Math.max(0.25, 1 - (this.level - 1) * 0.08) / mult;
   }
 
@@ -198,9 +208,16 @@ class WeaponSystem {
     const ok = fn.call(this, weapon, player, ...args);
     if (ok && player.extraCast > 0 && Math.random() < player.extraCast) {
       fn.call(this, weapon, player, ...args);
-      Audio.play('select');
     }
     return ok;
+  }
+
+  _fireSound(weapon) {
+    const magicIds = new Set([
+      'magic', 'fireball', 'frostbolt', 'spiritBolt', 'seekerBolt',
+      'scatterShot', 'pulseLaser', 'bombRain',
+    ]);
+    Audio.play(magicIds.has(weapon.id) || weapon.def.homing ? 'magic' : 'shoot');
   }
 
   addWeapon(player, weaponId) {
@@ -212,7 +229,8 @@ class WeaponSystem {
     }
   }
 
-  update(dt, player, enemies, bounds, particles) {
+  update(dt, player, enemies, bounds, particles, game) {
+    this._game = game;
     for (const weapon of player.weapons) {
       weapon.cooldown -= dt;
 
@@ -275,7 +293,7 @@ class WeaponSystem {
         m.hit = true;
         for (const enemy of enemies) {
           if (dist(m.x, m.y, enemy.x, enemy.y) < m.radius + enemy.radius) {
-            enemy.takeDamage(m.damage, m.x, m.y);
+            applyPlayerDamageValue(this._game, enemy, player, m.damage, m.x, m.y, false);
             particles.hit(enemy.x, enemy.y, m.color);
           }
         }
@@ -304,13 +322,16 @@ class WeaponSystem {
         if (p.hitIds.has(enemy.id)) continue;
         if (dist(p.x, p.y, enemy.x, enemy.y) < p.radius + enemy.radius) {
           p.hitIds.add(enemy.id);
-          const killed = enemy.takeDamage(p.damage, p.x, p.y);
+          applyPlayerDamageValue(this._game, enemy, player, p.damage, p.x, p.y, p.isCrit);
           particles.hit(enemy.x, enemy.y, p.color);
 
           if (p.aoe > 0) {
             for (const other of enemies) {
               if (other.id !== enemy.id && dist(p.x, p.y, other.x, other.y) < p.aoe) {
-                other.takeDamage(Math.floor(p.damage * 0.5), p.x, p.y);
+                applyPlayerDamageValue(
+                  this._game, other, player,
+                  Math.floor(p.damage * 0.5), p.x, p.y, false
+                );
                 particles.hit(other.x, other.y, p.color);
               }
             }
@@ -362,8 +383,7 @@ class WeaponSystem {
       while (diff < -Math.PI) diff += TAU;
 
       if (Math.abs(diff) < arc / 2) {
-        const damage = weapon.getDamage(player);
-        enemy.takeDamage(damage, player.x, player.y);
+        applyPlayerDamage(this._game, enemy, weapon, player, player.x, player.y);
         particles.hit(enemy.x, enemy.y, weapon.def.color);
       }
     }
@@ -379,6 +399,7 @@ class WeaponSystem {
       maxLife: 0.22,
       weaponId: weapon.id,
     });
+    Audio.play('melee');
     return true;
   }
 
@@ -393,11 +414,12 @@ class WeaponSystem {
 
     for (let i = 0; i < count; i++) {
       const spread = count > 1 ? (i - (count - 1) / 2) * 0.2 : 0;
+      const roll = weapon.rollDamage(player);
       this.projectiles.push(new Projectile(
         player.x, player.y,
         baseAngle + spread,
         weapon.def.speed,
-        weapon.getDamage(player),
+        roll.damage,
         {
           color: weapon.def.color,
           homing: weapon.def.homing,
@@ -405,9 +427,11 @@ class WeaponSystem {
           aoe: weapon.def.aoe || 0,
           sprite: weapon.def.sprite,
           radius: weapon.def.aoe > 0 ? 8 : 6,
+          isCrit: roll.crit,
         }
       ));
     }
+    this._fireSound(weapon);
     return true;
   }
 
@@ -424,12 +448,15 @@ class WeaponSystem {
 
     for (let i = 0; i < chains && current; i++) {
       hitEnemies.push(current);
+      const fromX = chainPoints[chainPoints.length - 1].x;
+      const fromY = chainPoints[chainPoints.length - 1].y;
       chainPoints.push({ x: current.x, y: current.y });
-      current.takeDamage(weapon.getDamage(player), chainPoints[chainPoints.length - 2].x, chainPoints[chainPoints.length - 2].y);
+      applyPlayerDamage(this._game, current, weapon, player, fromX, fromY);
       particles.hit(current.x, current.y, weapon.def.color);
 
       const remaining = enemies.filter(e => !hitEnemies.includes(e));
-      current = this.findNearest(current, remaining, range * 0.8);
+      const anchor = current;
+      current = this.findNearest(anchor, remaining, range * 0.8);
     }
 
     this.lightningEffects.push({
@@ -438,6 +465,7 @@ class WeaponSystem {
       life: 0.28,
       maxLife: 0.28,
     });
+    Audio.play('lightning');
     return true;
   }
 
@@ -457,7 +485,7 @@ class WeaponSystem {
       for (const enemy of enemies) {
         if (dist(bx, by, enemy.x, enemy.y) < ballR + enemy.radius) {
           if (!enemy._orbitHit || enemy._orbitHit <= 0) {
-            enemy.takeDamage(weapon.getDamage(player), bx, by);
+            applyPlayerDamage(this._game, enemy, weapon, player, bx, by);
             particles.hit(enemy.x, enemy.y, weapon.def.color);
             enemy._orbitHit = 0.3;
           }
@@ -483,11 +511,13 @@ class WeaponSystem {
       const nearest = this.findNearest({ x: sx, y: sy }, enemies, 350);
       if (nearest) {
         const angle = angleBetween(sx, sy, nearest.x, nearest.y);
+        const roll = weapon.rollDamage(player);
         this.projectiles.push(new Projectile(
-          sx, sy, angle, 450, weapon.getDamage(player),
-          { color: weapon.def.color, homing: true, sprite: weapon.def.sprite, lifetime: 2 }
+          sx, sy, angle, 450, roll.damage,
+          { color: weapon.def.color, homing: true, sprite: weapon.def.sprite, lifetime: 2, isCrit: roll.crit }
         ));
         weapon.cooldown = weapon.getCooldown(player);
+        Audio.play('shoot');
       }
     }
 
@@ -501,8 +531,9 @@ class WeaponSystem {
     if (!nearest) return false;
     const angle = angleBetween(player.x, player.y, nearest.x, nearest.y);
     const area = weapon.areaMult(player);
+    const roll = weapon.rollDamage(player);
     const p = new Projectile(
-      player.x, player.y, angle, weapon.def.speed, weapon.getDamage(player),
+      player.x, player.y, angle, weapon.def.speed, roll.damage,
       {
         color: weapon.def.color,
         pierce: weapon.def.pierce || 5,
@@ -510,19 +541,20 @@ class WeaponSystem {
         boomerang: true,
         maxRange: weapon.def.maxRange * area,
         lifetime: 4,
+        isCrit: roll.crit,
       }
     );
     this.projectiles.push(p);
+    Audio.play('boomerang');
     return true;
   }
 
   fireNova(weapon, player, enemies, particles) {
     const area = weapon.areaMult(player);
     const radius = weapon.def.radius * area * (1 + (weapon.level - 1) * 0.08);
-    const damage = weapon.getDamage(player);
     for (const enemy of enemies) {
       if (dist(player.x, player.y, enemy.x, enemy.y) < radius + enemy.radius) {
-        enemy.takeDamage(damage, player.x, player.y);
+        applyPlayerDamage(this._game, enemy, weapon, player, player.x, player.y);
         particles.hit(enemy.x, enemy.y, weapon.def.color);
       }
     }
@@ -555,6 +587,7 @@ class WeaponSystem {
         hit: false,
       });
     }
+    Audio.play('rain');
     return true;
   }
 
@@ -574,6 +607,7 @@ class WeaponSystem {
         }
       ));
     }
+    Audio.play('cross');
     return true;
   }
 

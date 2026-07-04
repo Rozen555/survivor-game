@@ -193,162 +193,209 @@ const Sprites = {
 
     // ── 召唤物 ──
     const SS = 2;
+    const SL = 3;
+
     this._bake('summon_turret_0', [
-      '....ssssss....',
-      '...sbbbbbs...',
-      '..sbccccbs..',
-      '..sbccccbs..',
-      '..sbbbbbbbs..',
-      '...sbbbbbs...',
-      '....ssssss....',
-      '.....ccc.....',
-      '.....ccc.....',
-      '......c......',
-    ], { s: '#3d3d55', b: '#5352ed', c: '#00cec9' }, SS);
+      '......ssssss......',
+      '.....sbbbbbbbs.....',
+      '....sbllccllbs....',
+      '....sbccwwccbs....',
+      '....sbccbbccbs....',
+      '...sbbbccccbbbs...',
+      '...ssbbbbbbbbss...',
+      '....ssssssssss....',
+      '.....cccccccc.....',
+      '......llllll......',
+      '.......cccc.......',
+      '........cc........',
+    ], { s: '#3d3d55', b: '#5352ed', c: '#00cec9', l: '#81ecec', w: '#dff9fb' }, SS);
 
     this._bake('summon_turret_1', [
-      '....ssssss....',
-      '...sbbbbbs...',
-      '..sbcccbcbs..',
-      '..sbccccbs..',
-      '..sbbbbbbbs..',
-      '...sbbbbbs...',
-      '....ssssss....',
-      '.....ccc.....',
-      '.....ccc.....',
-      '......c......',
-    ], { s: '#3d3d55', b: '#5352ed', c: '#81ecec' }, SS);
+      '......ssssss......',
+      '.....sbbbbbbbs.....',
+      '....sbccwwccbs....',
+      '....sbwwllwwbs....',
+      '....sbccbbccbs....',
+      '...sbbbccccbbbs...',
+      '...ssbbbbbbbbss...',
+      '....ssssssssss....',
+      '.....llllllll.....',
+      '......cccccc......',
+      '.......cccc.......',
+      '........cc........',
+    ], { s: '#3d3d55', b: '#5352ed', c: '#00cec9', l: '#81ecec', w: '#dff9fb' }, SS);
 
     this._bake('summon_boar_0', [
-      '..............',
-      '....bbbbbb....',
-      '...bbbbbbbb...',
-      '..bbbbbbbbbb..',
-      '.bbbbbbeebbbb.',
-      '.bbbbbbebbbbbb',
-      '..bbbbbbbbbb..',
-      '...bb....bb...',
-      '..bb......bb..',
-      '.b...........b',
-    ], { b: '#8B4513', e: '#2d3436', t: '#5a3a1a' }, SS);
+      '................',
+      '....hhhhhhhh....',
+      '...hbbbbbbbbh...',
+      '..hbbbbbbeebbbh.',
+      '.hbbbbbbbtbbbbbh',
+      '.bbbbbbbbbbbbbb.',
+      '..bbbbbbbbbbbb..',
+      '...bb......bb...',
+      '..bb........bb..',
+      '.bb..........bb.',
+    ], { b: '#8B4513', h: '#5a3a1a', e: '#2d3436', t: '#f5deb3' }, SS);
 
     this._bake('summon_boar_1', [
-      '..............',
-      '....bbbbbb....',
-      '...bbbbbbbb...',
-      '..bbbbbbbbbb..',
-      '.bbbbbbeebbbb.',
-      '.bbbbbbebbbbbb',
-      '..bbbbbbbbbb..',
-      '...bb....bb...',
-      '..b........b..',
-      '.b..........b.',
-    ], { b: '#8B4513', e: '#2d3436', t: '#5a3a1a' }, SS);
+      '................',
+      '....hhhhhhhh....',
+      '...hbbbbbbbbh...',
+      '..hbbbbbbeebbbh.',
+      '.hbbbbbbbtbbbbbh',
+      '.bbbbbbbbbbbbbb.',
+      '..bbbbbbbbbbbb..',
+      '...bb......bb...',
+      '..b..........b..',
+      '.bb..........bb.',
+    ], { b: '#8B4513', h: '#5a3a1a', e: '#2d3436', t: '#f5deb3' }, SS);
 
     this._bake('summon_wolf_0', [
-      '.....gggg.....',
-      '....gggggg....',
-      '...gggeegg....',
-      '...ggggggg....',
-      '..ggggggggg...',
-      '..ggggggggg...',
-      '.ggg....ggg...',
-      '.gg......gg...',
-      '..g......g....',
-    ], { g: '#636e72', e: '#dfe6e9' }, SS);
+      '......gggg......',
+      '.....gggggg.....',
+      '....gggeegg.....',
+      '...gggGGgggg....',
+      '..gggggggggg....',
+      '..gggggggggg....',
+      '..wwg....gww....',
+      '..gg......gg....',
+      '.g..........g...',
+      '..g........g....',
+    ], { g: '#636e72', G: '#b2bec3', e: '#dfe6e9', w: '#4a5568' }, SS);
 
     this._bake('summon_wolf_1', [
-      '.....gggg.....',
-      '....gggggg....',
-      '...gggeegg....',
-      '...ggggggg....',
-      '..ggggggggg...',
-      '..ggggggggg...',
-      '.ggg....ggg...',
-      '..g......g....',
-      '...g....g.....',
-    ], { g: '#636e72', e: '#dfe6e9' }, SS);
+      '......gggg......',
+      '.....gggggg.....',
+      '....gggeegg.....',
+      '...gggGGgggg....',
+      '..gggggggggg....',
+      '..gggggggggg....',
+      '..g........g....',
+      '...g......g.....',
+      '....g....g......',
+      '.....g..g.......',
+    ], { g: '#636e72', G: '#b2bec3', e: '#dfe6e9', w: '#4a5568' }, SS);
 
     this._bake('summon_bear_0', [
-      '...bbbb.......',
-      '...bbbb.......',
-      '..bbbbbbbb....',
-      '.bbbbbbbbbb...',
-      '.bbbbebbbbbb..',
-      '.bbbbbbbbbbb..',
-      '..bbbbbbbbbb..',
-      '...bb....bb...',
-      '..bb......bb..',
-      '..bb......bb..',
-    ], { b: '#6d4c41', e: '#2d3436' }, SS);
+      '......bb......bb......',
+      '.....BBBBBBBBBBBB.....',
+      '....BBBBBBBBBBBBBB....',
+      '...BBBBBBeeBBBBBBBB...',
+      '..BBBBBBmmnnBBBBBBBB..',
+      '..BBBBBBBBBBBBBBBBBB..',
+      '.BBBBBBBBBBBBBBBBBBBB.',
+      '.bbb..BBBBBBBBBB..bbb.',
+      '..bb....BBBBBB....bb..',
+      '..bb.....BBBB.....bb..',
+      '.bb.......bb.......bb.',
+    ], { b: '#4a3428', B: '#6d4c41', e: '#2d3436', m: '#8d6e63', n: '#3e2723' }, SL);
+
+    this._bake('summon_bear_1', [
+      '......bb......bb......',
+      '.....BBBBBBBBBBBB.....',
+      '....BBBBBBBBBBBBBB....',
+      '...BBBBBBeeBBBBBBBB...',
+      '..BBBBBBmmnnBBBBBBBB..',
+      '..BBBBBBBBBBBBBBBBBB..',
+      '.BBBBBBBBBBBBBBBBBBBB.',
+      '.bbb..BBBBBBBBBB..bbb.',
+      '..bb....BBBBBB....bb..',
+      '.bb......BBBB......bb.',
+      'bb........bb........bb',
+    ], { b: '#4a3428', B: '#6d4c41', e: '#2d3436', m: '#8d6e63', n: '#3e2723' }, SL);
 
     this._bake('summon_mammoth_0', [
-      '.....tttt.....',
-      '....tttttt....',
-      '...tttttttt...',
-      '..tttttttttt..',
-      '.tttttttttttt.',
-      '.ttttettttttt.',
-      '.tttttttttttt.',
-      'ttt........ttt',
-      'tt..........tt',
-      'tt..........tt',
-    ], { t: '#b2bec3', e: '#2d3436' }, SS);
+      '........tttttt........',
+      '.......tttttttt.......',
+      '......tttttttttt......',
+      '.....tttttttttttt.....',
+      '....tttttttttttttt....',
+      '...tttteitttteitttt...',
+      '....tttnnnnnntttt.....',
+      '..tttttttttttttttttt..',
+      '.tttttttttttttttttttt.',
+      'tttttttttttttttttttttt',
+      'hhh................hhh',
+      'hh..................hh',
+      'hh..................hh',
+    ], { t: '#95a5a6', f: '#b2bec3', e: '#2d3436', i: '#ecf0f1', h: '#7f8c8d', n: '#636e72' }, SL);
+
+    this._bake('summon_mammoth_1', [
+      '........tttttt........',
+      '.......tttttttt.......',
+      '......tttttttttt......',
+      '.....tttttttttttt.....',
+      '....tttttttttttttt....',
+      '...tttteitttteitttt...',
+      '....tttnnnnnntttt.....',
+      '..tttttttttttttttttt..',
+      '.tttttttttttttttttttt.',
+      'tttttttttttttttttttttt',
+      'hhh................hhh',
+      'hh..hh..........hh..hh',
+      'hh..hh..........hh..hh',
+    ], { t: '#95a5a6', f: '#b2bec3', e: '#2d3436', i: '#ecf0f1', h: '#7f8c8d', n: '#636e72' }, SL);
 
     this._bake('summon_eagle_0', [
-      '..............',
-      '.....rrrr.....',
-      '....rrrrrr....',
-      '...rrreeerr...',
-      '...rrrrrrrr...',
-      '..rrrrrrrrrr..',
-      '.rrr......rrr.',
-      'rr..........rr',
-    ], { r: '#e17055', e: '#fff' }, SS);
+      '................',
+      '.rr............rr.',
+      '..rr..........rr..',
+      '...rrrrrrrrrrrr...',
+      '....wwweeewww.....',
+      '.....yyyrrrr......',
+      '......rrrr........',
+      '.......rr.........',
+      '................',
+    ], { r: '#e17055', w: '#fff', e: '#2d3436', y: '#fdcb6e' }, SS);
 
     this._bake('summon_eagle_1', [
-      'rr..........rr',
-      '.rrr......rrr.',
-      '..rrrrrrrrrr..',
-      '...rrrrrrrr...',
-      '...rrreeerr...',
-      '....rrrrrr....',
-      '.....rrrr.....',
-      '..............',
-    ], { r: '#e17055', e: '#fff' }, SS);
+      '................',
+      '.......rr.......',
+      '......rrrr......',
+      '.....rrrrrr.....',
+      '....wwweeewww...',
+      '...rrrrrrrrrr...',
+      '..rr..........rr..',
+      '.rr............rr.',
+      '................',
+    ], { r: '#e17055', w: '#fff', e: '#2d3436', y: '#fdcb6e' }, SS);
 
     this._bake('summon_dragon_0', [
-      '.......rrrr.......',
-      '......rrrrrr......',
-      '.....rrryyyrr.....',
-      '....rrryyyowrr....',
-      '...rrryyyoowrr...',
-      '..bbrrryyoowrrbb..',
-      '.bbrrryyeowwrrbb.',
-      'bbrrryyeeowrrbb',
-      '.brrryyeeowrrb.',
-      '..ryyywwwyyr..',
-      '..rywwwwwwyr..',
-      '...rwwwwwwr...',
-      '....rr..rr....',
-    ], { r: '#d63031', y: '#fdcb6e', o: '#e17055', w: '#ff7675', e: '#fff', b: '#2d1b4e' }, 2);
+      '........bb........bb........',
+      '........rrrrrrrrrrrr........',
+      '.......rrryyyyyyyrrr.......',
+      '......rrryyyyowyyyrrr......',
+      '.....rrryyyyooowyyyrrr.....',
+      '....bbrrryyyyeeowyyyrrbb....',
+      '...bbrrryyyyeeoowyyrrrbb...',
+      '..bbrrrrrrrreeowwrrrrrbb..',
+      '.bbrrrrrrrrreowwrrrrrrbb.',
+      'bbrrrrrrrrrrrwwrrrrrrrrbb',
+      '.brrryyyyyyywwyyyyyyrrb.',
+      '..ryyywwwwwwwwwwwwwyyr..',
+      '..rywwwwwwwwwwwwwwwyr..',
+      '...rwwwwwwwwwwwwwwwr...',
+      '....rrrr......rrrr....',
+    ], { r: '#d63031', y: '#fdcb6e', o: '#e17055', w: '#ff7675', e: '#fff', b: '#2d1b4e' }, SL);
 
     this._bake('summon_dragon_1', [
-      '...bb.......bb...',
-      '...bb.......bb...',
-      '.......rrrr.......',
-      '......rrrrrr......',
-      '.....rrryyyrr.....',
-      '....rrryyyowrr....',
-      '...rrryyyoowrr...',
-      '..bbrrryyoowrrbb..',
-      '.bbrrryyeowwrrbb.',
-      'bbrrryyeeowrrbb',
-      '.brrryyeeowrrb.',
-      '..ryyywwwyyr..',
-      '..rywwwwwwyr..',
-      '...rwwwwwwr...',
-    ], { r: '#d63031', y: '#fdcb6e', o: '#e17055', w: '#ff7675', e: '#fff', b: '#2d1b4e' }, 2);
+      'bb..............bb........bb',
+      'bb..............bb........bb',
+      '........rrrrrrrrrrrr........',
+      '.......rrryyyyyyyrrr.......',
+      '......rrryyyyowyyyrrr......',
+      '.....rrryyyyooowyyyrrr.....',
+      '....bbrrryyyyeeowyyyrrbb....',
+      '...bbrrryyyyeeoowyyrrrbb...',
+      '..bbrrrrrrrreeowwrrrrrbb..',
+      '.bbrrrrrrrrreowwrrrrrrbb.',
+      'bbrrrrrrrrrrrwwrrrrrrrrbb',
+      '.brrryyyyyyywwyyyyyyrrb.',
+      '..ryyywwwwwwwwwwwwwyyr..',
+      '..rywwwwwwwwwwwwwwwyr..',
+      '...rwwwwwwwwwwwwwwwr...',
+    ], { r: '#d63031', y: '#fdcb6e', o: '#e17055', w: '#ff7675', e: '#fff', b: '#2d1b4e' }, SL);
 
     // ── 怪物：史莱姆 ──
     this._bake('enemy_slime_0', [
@@ -428,6 +475,21 @@ const Sprites = {
       '....ww..ww....',
     ], { w: '#dfe6e9', e: '#2d3436' });
 
+    this._bake('enemy_skeleton_1', [
+      '.....wwww.....',
+      '....wwwwww....',
+      '...wwweeww....',
+      '...wwwwwwww...',
+      '....wwwwww....',
+      '.....wwww.....',
+      '.....wwww.....',
+      '......ww......',
+      '.....wwww.....',
+      '....ww..ww....',
+      '...ww....ww...',
+      '...ww....ww...',
+    ], { w: '#dfe6e9', e: '#2d3436' });
+
     // ── 怪物：蛮兽 ──
     this._bake('enemy_brute_0', [
       '.....oooo.....',
@@ -442,6 +504,21 @@ const Sprites = {
       '..ot......to..',
       '..ot......to..',
       '..ot......to..',
+    ], { o: '#e17055', e: '#ffd93d', t: '#2d3436' });
+
+    this._bake('enemy_brute_1', [
+      '.....oooo.....',
+      '...oooooooo...',
+      '..oooooooooo..',
+      '.oooooooooooo.',
+      'oooooooooooooo',
+      'oooeooooooeooo',
+      'oooooooooooooo',
+      '.oooooooooooo.',
+      '..oooooooooo..',
+      '..ot..oot.....',
+      '..ot..oot.....',
+      '....otoot.....',
     ], { o: '#e17055', e: '#ffd93d', t: '#2d3436' });
 
     // ── 怪物：哥布林 ──
@@ -491,6 +568,21 @@ const Sprites = {
       '....zz..zz....',
     ], { z: '#636e72', e: '#00b894' });
 
+    this._bake('enemy_zombie_1', [
+      '.....zzzz.....',
+      '....zzzzzz....',
+      '...zzzezzz....',
+      '...zzzzzzz....',
+      '....zzzzzz....',
+      '.....zzzz.....',
+      '....gggggg....',
+      '...gggggggg...',
+      '....zz..zz....',
+      '...zz....zz...',
+      '....zz..zz....',
+      '....zz..zz....',
+    ], { z: '#636e72', e: '#00b894', g: '#2ecc71' });
+
     // ── 怪物：幽灵 ──
     this._bake('enemy_ghost_0', [
       '.....bbbb.....',
@@ -538,6 +630,21 @@ const Sprites = {
       '....pp..pp....',
     ], { p: '#a29bfe', e: '#ffeaa7' });
 
+    this._bake('enemy_mage_1', [
+      '.....pppp.....',
+      '....pppppp....',
+      '...pppeppp....',
+      '...ppppppp....',
+      '....pppppp....',
+      '.....pppp.....',
+      '....ssssss....',
+      '...ssssssss...',
+      '...ssssssss...',
+      '....ss..ss....',
+      '....ss..ss....',
+      '....ss..ss....',
+    ], { p: '#a29bfe', e: '#ffeaa7', s: '#6c5ce7' });
+
     // ── 怪物：爆弹怪 ──
     this._bake('enemy_exploder_0', [
       '.....yyyy.....',
@@ -581,6 +688,21 @@ const Sprites = {
       '...hhhhhhhh...',
       '...hh....hh...',
       '...hh....hh...',
+      '...hh....hh...',
+      '...hh....hh...',
+    ], { h: '#e84393', e: '#ffd93d' });
+
+    this._bake('enemy_charger_1', [
+      '.....hhhh.....',
+      '....hhhhhh....',
+      '...hhhhhhhh...',
+      '...hhheehh....',
+      '....hhhhhh....',
+      '.....hhhh.....',
+      '....hhhhhh....',
+      '...hhhhhhhh...',
+      '...hh....hh...',
+      '..hh......hh..',
       '...hh....hh...',
       '...hh....hh...',
     ], { h: '#e84393', e: '#ffd93d' });
@@ -779,6 +901,21 @@ const Sprites = {
       '.....bbbb.....',
     ], { b: '#8B4513', e: '#ffd93d' });
 
+    this._bake('enemy_hopper_1', [
+      '.....bbbb.....',
+      '....bbbbbb....',
+      '...bbbeebbb...',
+      '....bbbbbb....',
+      '.....bbbb.....',
+      '....bbbbbb....',
+      '....bb..bb....',
+      '....bb..bb....',
+      '.....bbbb.....',
+      '....bb..bb....',
+      '...bb....bb...',
+      '.....bbbb.....',
+    ], { b: '#8B4513', e: '#ffd93d' });
+
     // ── 怪物：裂口者 ──
     this._bake('enemy_gaper_0', [
       '.....rrrr.....',
@@ -826,126 +963,293 @@ const Sprites = {
       '...zz....zz...',
     ], { z: '#7f8c8d', e: '#2ecc71' });
 
-    // ── 怪物：精英（多种） ──
+    this._bake('enemy_bloater_1', [
+      '.....zzzz.....',
+      '...zzzzzzzz...',
+      '..zzzzzzzzzz..',
+      '.zzzzzzzzzzzz.',
+      'zzzzzzzzzzzzzz',
+      'zzzzeezzeezzzz',
+      'zzzzzzzzzzzzzz',
+      '.zzzzzzzzzzzz.',
+      '..zzzzzzzzzz..',
+      '...zz....zz...',
+      '..zz......zz..',
+      '...zz....zz...',
+    ], { z: '#7f8c8d', e: '#2ecc71' });
+
+    // ── 怪物：精英（各具特色造型） ──
     this._bake('enemy_eliteKnight_0', [
-      '.....yyyy.....',
-      '....yyyyyy....',
-      '...yyyeeyy....',
-      '...yyyyyyyy...',
-      '....yyyyyy....',
-      '.....yyyy.....',
-      '....yyyyyy....',
-      '...yyyyyyyy...',
-      '...yy....yy...',
-      '...yy....yy...',
-      '...yy....yy...',
-      '...yy....yy...',
-    ], { y: '#fdcb6e', e: '#d63031' }, 3);
+      '....ssss......',
+      '...syyyyys....',
+      '..syreeeys....',
+      '.syyyyyyyys...',
+      '..yyyyyyyy....',
+      '...yyyyyy.....',
+      '...ssssss.....',
+      '..ss....ss....',
+      '..ss....ss....',
+      '..ss....ss....',
+      '..ss....ss....',
+      '..ss....ss....',
+      '..ss....ss....',
+      '..ss....ss....',
+    ], { y: '#fdcb6e', e: '#d63031', s: '#b2bec3' }, 3);
+
+    this._bake('enemy_eliteKnight_1', [
+      '....ssss......',
+      '...syyyyys....',
+      '..syreeeys....',
+      '.syyyyyyyys...',
+      '..yyyyyyyy....',
+      '...yyyyyy.....',
+      '..ssssssss....',
+      '.ss......ss...',
+      '..ss....ss....',
+      '...ss..ss.....',
+      '....ssss......',
+      '.....ss.......',
+      '.....ss.......',
+      '.....ss.......',
+    ], { y: '#fdcb6e', e: '#d63031', s: '#dfe6e9' }, 3);
 
     this._bake('enemy_eliteMage_0', [
-      '......pp......',
-      '.....pppp.....',
-      '....ppbbpp....',
-      '...ppbbbbpp...',
-      '...ppbebbpp...',
-      '....ppbbpp....',
-      '.....pppp.....',
-      '.....llll.....',
-      '....ll..ll....',
-      '....ll..ll....',
-      '....ll..ll....',
-      '....ll..ll....',
-    ], { p: '#a29bfe', b: '#6c5ce7', e: '#fff', l: '#dfe6e9' }, 3);
+      '.....ww.......',
+      '....wwww......',
+      '...wwssww.....',
+      '..wwweeww.....',
+      '..wwssssww....',
+      '...wwwwww.....',
+      '....pppp......',
+      '...pbbbbp.....',
+      '...pbebbp.....',
+      '...pbbbbp.....',
+      '...pl..lp.....',
+      '...pl..lp.....',
+      '...pl..lp.....',
+      '...pl..lp.....',
+    ], { w: '#74b9ff', s: '#0984e3', p: '#a29bfe', b: '#6c5ce7', e: '#fff', l: '#dfe6e9' }, 3);
+
+    this._bake('enemy_eliteMage_1', [
+      '.....ww.......',
+      '....wwww......',
+      '...wwssww.....',
+      '..wwweeww.....',
+      '..wwssssww....',
+      '...wwwwww.....',
+      '....ssss......',
+      '...s....s.....',
+      '....s..s......',
+      '.....ss.......',
+      '...pl..lp.....',
+      '...pl..lp.....',
+      '...pl..lp.....',
+      '...pl..lp.....',
+    ], { w: '#74b9ff', s: '#0984e3', p: '#a29bfe', b: '#6c5ce7', e: '#fff', l: '#dfe6e9' }, 3);
 
     this._bake('enemy_eliteBerserker_0', [
-      '.....rrrr.....',
-      '....rrrrrr....',
-      '...rrreeerr...',
-      '...rrrrrrrr...',
-      '....rrrrrr....',
-      '.....rrrr.....',
-      '....rrrrrr....',
-      '...rrrrrrrr...',
-      '...rr....rr...',
-      '...rr....rr...',
-      '...rr....rr...',
-      '...rr....rr...',
-    ], { r: '#e84393', e: '#ff4757' }, 3);
+      '..aa......aa..',
+      '.aaa......aaa.',
+      'aaarreeerraaa.',
+      '.aaaaaaaaaaaa.',
+      '..aaaaaaaaaa..',
+      '...aaaaaaaa...',
+      '...aaaaaaaa...',
+      '..aa......aa..',
+      '..aa......aa..',
+      '..aa......aa..',
+      '..aa......aa..',
+      '..aa......aa..',
+      '..aa......aa..',
+      '..aa......aa..',
+    ], { a: '#e84393', r: '#ff4757', e: '#fff' }, 3);
+
+    this._bake('enemy_eliteBerserker_1', [
+      '..aa......aa..',
+      'aaa........aaa',
+      'aaarreeerraaa.',
+      'aaaaaaaaaaaaaa',
+      '.aaaaaaaaaaaa.',
+      '..aaaaaaaaaa..',
+      '...aaaaaaaa...',
+      '..aa......aa..',
+      '.aa........aa.',
+      'aa..........aa',
+      '..aa......aa..',
+      '..aa......aa..',
+      '..aa......aa..',
+      '..aa......aa..',
+    ], { a: '#e84393', r: '#ff4757', e: '#fff' }, 3);
 
     this._bake('enemy_elitePhantom_0', [
-      '......bb......',
-      '.....bbbb.....',
-      '....bbeebb....',
-      '...bbbbbbbb...',
-      '...bbbeebb....',
+      '...bb....bb...',
+      '..bbbeeebbb...',
+      '.bbbbbbbbbbbb.',
+      '..bbbeebbb....',
+      '...bbbbbbb....',
       '....bbbbbb....',
       '.....bbbb.....',
+      '....bbbbbbb...',
+      '...bb....bb...',
+      '...bb....bb...',
+      '....bbbbbb....',
       '.....bbbb.....',
-      '....bb..bb....',
-      '....bb..bb....',
-      '....bb..bb....',
-      '....bb..bb....',
+      '......bb......',
+      '......bb......',
+    ], { b: '#74b9ff', e: '#fff' }, 3);
+
+    this._bake('enemy_elitePhantom_1', [
+      'bb..........bb',
+      '.bbbeeebbb....',
+      '..bbbbbbbbbbb.',
+      '...bbbeebbb...',
+      '....bbbbbbb...',
+      '.....bbbbbb...',
+      '......bbbb....',
+      '....bbbbbbb...',
+      '...bb....bb...',
+      '....bbbbbb....',
+      '.....bbbb.....',
+      '......bb......',
+      '......bb......',
+      '......bb......',
     ], { b: '#74b9ff', e: '#fff' }, 3);
 
     this._bake('enemy_eliteWarlock_0', [
       '......vv......',
       '.....vvvv.....',
-      '....vvwwvv....',
-      '...vvwwwwvv...',
-      '...vvweewvv...',
-      '....vvwwvv....',
+      '....vvssvv....',
+      '...vvssssvv...',
+      '...vvseesvv...',
+      '....vvssvv....',
       '.....vvvv.....',
-      '.....cccc.....',
-      '....cc..cc....',
-      '....cc..cc....',
-      '....cc..cc....',
-      '....cc..cc....',
-    ], { v: '#6c5ce7', w: '#a29bfe', e: '#fff', c: '#2d3436' }, 3);
+      '....cccccc....',
+      '...cc....cc...',
+      '...cc....cc...',
+      '...cc....cc...',
+      '...cc....cc...',
+      '...cc....cc...',
+      '...cc....cc...',
+    ], { v: '#6c5ce7', s: '#2d3436', e: '#fff', c: '#1a1a2e' }, 3);
 
-    // ── 怪物：BOSS（多种） ──
+    this._bake('enemy_eliteWarlock_1', [
+      '......vv......',
+      '.....vvvv.....',
+      '....vvssvv....',
+      '...vvssssvv...',
+      '...vvseesvv...',
+      '....vvssvv....',
+      '.....vvvv.....',
+      '....pppppp....',
+      '...p......p...',
+      '....p....p....',
+      '.....p..p.....',
+      '...cc....cc...',
+      '...cc....cc...',
+      '...cc....cc...',
+    ], { v: '#6c5ce7', s: '#2d3436', e: '#fff', c: '#1a1a2e', p: '#fd79a8' }, 3);
+
+    // ── 怪物：BOSS（三种截然不同） ──
     this._bake('enemy_boss_0', [
-      '....yyyy....',
-      '..yrrrrrry..',
-      '.yrrrrrrrry.',
-      'yrrreeeerrry',
-      'yrrreeeerrry',
-      'yrrrrrrrrrry',
-      '.yrrrrrrrry.',
-      '..yrrrrrry..',
-      '...yrrrrry...',
-      '..yrr..rry..',
-      '..yrr..rry..',
-      '..yrr..rry..',
-    ], { y: '#ffd93d', r: '#d63031', e: '#fff' }, 3);
+      '....yyyy......',
+      '..yrrrrrry....',
+      '.yrreeweery...',
+      'yrrrrrrrrrry..',
+      'yyrrrrrrrryy..',
+      '.yrrrrrrrry...',
+      '..yrrrrrry....',
+      '...yrrrrr.....',
+      '..yr....ry....',
+      '..yr....ry....',
+      '..yr....ry....',
+      '..yr....ry....',
+      '..yr....ry....',
+      '..yr....ry....',
+    ], { y: '#ffd93d', r: '#d63031', e: '#fff', w: '#ff7675' }, 3);
+
+    this._bake('enemy_boss_1', [
+      '....yyyy......',
+      'yrrrrrrrrrry..',
+      'yrreeweewery..',
+      'yrrrrrrrrrry..',
+      'yyrrrrrrrryy..',
+      '.yrrrrrrrry...',
+      '..yrrrrrry....',
+      '...yrrrrr.....',
+      '..yr....ry....',
+      '..yr....ry....',
+      '..yr....ry....',
+      '..yr....ry....',
+      '..yr....ry....',
+      '..yr....ry....',
+    ], { y: '#ffd93d', r: '#d63031', e: '#fff', w: '#ff7675' }, 3);
 
     this._bake('enemy_bossHydra_0', [
-      '...gg..gg...',
-      '..ggg..ggg..',
-      '.gggggggggg.',
-      'ggggeegggggg',
-      'gggggggggggg',
-      '.gggggggggg.',
-      '..gggggggg..',
-      '...gggggg...',
-      '..gg....gg..',
-      '..gg....gg..',
-      '..gg....gg..',
-      '..gg....gg..',
+      '...gg..gg..gg...',
+      '..ggg.ggg.ggg...',
+      '.gggeeggeeggeeg.',
+      'gggggggggggggg..',
+      '.gggggggggggg...',
+      '..gggggggggg....',
+      '...gggggggg.....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
+    ], { g: '#00cec9', e: '#55efc4' }, 3);
+
+    this._bake('enemy_bossHydra_1', [
+      '..gg....gg....gg',
+      'gg..ggg..ggg..gg',
+      'gggeeggeeggeeggg',
+      'gggggggggggggggg',
+      '.gggggggggggg...',
+      '..gggggggggg....',
+      '...gggggggg.....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
+      '..gg......gg....',
     ], { g: '#00cec9', e: '#55efc4' }, 3);
 
     this._bake('enemy_bossTitan_0', [
-      '.....oooo.....',
-      '....oooooo....',
-      '...oooyyoo....',
-      '...oooooooo...',
-      '....oooooo....',
-      '.....oooo.....',
-      '....oooooo....',
-      '...oooooooo...',
-      '...oo....oo...',
-      '...oo....oo...',
-      '...oo....oo...',
-      '...oo....oo...',
+      '....oooo......',
+      '...oyyyyo.....',
+      '..oooooooo....',
+      '.oooyyyyoo....',
+      '.oooooooooo...',
+      '..oooooooo....',
+      '...ooooooo....',
+      '..oooooooo....',
+      '..oo....oo....',
+      '..oo....oo....',
+      '..oo....oo....',
+      '..oo....oo....',
+      '..oo....oo....',
+      '..oo....oo....',
+    ], { o: '#e17055', y: '#fdcb6e' }, 3);
+
+    this._bake('enemy_bossTitan_1', [
+      '....oooo......',
+      '...oyyyyo.....',
+      '..oooyyooo....',
+      '.oooooooooo...',
+      '.oooyyyyoo....',
+      '..oooooooo....',
+      '...ooooooo....',
+      '..oooooooo....',
+      '..oo....oo....',
+      '..oo....oo....',
+      '..oo....oo....',
+      '..oo....oo....',
+      '..oo....oo....',
+      '..oo....oo....',
     ], { o: '#e17055', y: '#fdcb6e' }, 3);
 
     // ── 武器贴图 ──
@@ -1203,29 +1507,62 @@ const Sprites = {
   },
 
   drawSummon(ctx, entity) {
-    const animated = ['turret', 'boar', 'wolf', 'eagle', 'dragon'];
+    const animated = ['turret', 'boar', 'wolf', 'bear', 'mammoth', 'eagle', 'dragon'];
     const frame = animated.includes(entity.typeId)
       ? Math.floor(entity.wobble * 2) % 2
       : 0;
     const name = `summon_${entity.typeId}_${frame}`;
     const scaleMap = {
-      turret: 1.05,
-      boar: 1.0,
-      wolf: 0.95,
-      bear: 1.15,
-      mammoth: 1.25,
-      eagle: 1.0,
-      dragon: 1.55,
+      turret: 1.1,
+      boar: 1.08,
+      wolf: 1.02,
+      bear: 1.38,
+      mammoth: 1.5,
+      eagle: 1.1,
+      dragon: 1.42,
     };
     const scale = scaleMap[entity.typeId] || 1;
-    const flipX = Math.cos(entity.facing || 0) < -0.1;
+    const charging = entity.typeId === 'boar' && entity.charging;
+    const flipX = !charging && Math.cos(entity.facing || 0) < -0.1;
     const bob = entity.typeId === 'dragon'
       ? Math.sin(entity.wobble * 1.3) * 4
-      : Math.sin(entity.wobble) * 1.5;
+      : entity.typeId === 'mammoth'
+        ? Math.sin(entity.wobble * 0.8) * 2.2
+        : entity.typeId === 'bear'
+          ? Math.sin(entity.wobble * 1.1) * 1.8
+          : entity.typeId === 'eagle'
+            ? Math.sin(entity.wobble * 1.6) * 2.5
+            : Math.sin(entity.wobble) * 1.5;
+    const shadowMult = entity.typeId === 'mammoth' ? 1.2
+      : entity.typeId === 'bear' ? 1.05
+      : entity.typeId === 'dragon' ? 1.12
+      : entity.typeId === 'boar' && charging ? 0.95
+      : 0.85;
 
-    Sprites.drawShadow(ctx, entity.x, entity.y + bob, scale * (entity.typeId === 'dragon' ? 1.1 : 0.8), 0.35);
+    Sprites.drawShadow(ctx, entity.x, entity.y + bob, scale * shadowMult, entity.typeId === 'mammoth' ? 0.42 : 0.35);
 
-    if (entity.typeId === 'dragon') {
+    if (entity.typeId === 'turret') {
+      const pulse = 0.2 + Math.sin(entity.wobble * 3) * 0.1;
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob - 4, 14, '#00cec9', pulse);
+    } else if (entity.typeId === 'boar' && charging) {
+      const back = entity.facing || 0;
+      for (let i = 0; i < 3; i++) {
+        ctx.save();
+        ctx.fillStyle = `rgba(139, 69, 19, ${0.25 - i * 0.07})`;
+        ctx.beginPath();
+        ctx.arc(
+          entity.x - Math.cos(back) * (10 + i * 5),
+          entity.y + bob - Math.sin(back) * (10 + i * 5),
+          3 - i * 0.6, 0, TAU
+        );
+        ctx.fill();
+        ctx.restore();
+      }
+    } else if (entity.typeId === 'wolf') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 2, '#b2bec3', 0.08);
+    } else if (entity.typeId === 'eagle') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 4, '#fab1a0', 0.1 + Math.sin(entity.wobble * 2) * 0.04);
+    } else if (entity.typeId === 'dragon') {
       const pulse = 0.35 + Math.sin(entity.wobble * 2.5) * 0.15;
       Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 10, '#ff7675', pulse * 0.35);
       Sprites._drawEnemyRing(ctx, entity.x, entity.y + bob, entity.radius + 16, '#fdcb6e', pulse * 0.28);
@@ -1242,6 +1579,15 @@ const Sprites = {
         ctx.fill();
         ctx.restore();
       }
+    } else if (entity.typeId === 'mammoth') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 6, '#b2bec3', 0.12 + Math.sin(entity.wobble * 0.6) * 0.04);
+      if (entity.flash > 0) {
+        Sprites._drawEnemyRing(ctx, entity.x, entity.y + bob, entity.radius + 14, '#ecf0f1', entity.flash * 0.35);
+      }
+    } else if (entity.typeId === 'bear') {
+      if (entity.flash > 0) {
+        Sprites._drawEnemyRing(ctx, entity.x, entity.y + bob, entity.radius + 10, '#8d6e63', entity.flash * 0.4);
+      }
     } else if (entity.level >= 5) {
       ctx.save();
       ctx.translate(entity.x, entity.y + bob);
@@ -1255,11 +1601,17 @@ const Sprites = {
 
     const spr = Sprites.get(name);
     if (spr) {
+      let rotation = 0;
+      if (charging) {
+        rotation = entity.facing || 0;
+      } else if (entity.typeId === 'eagle') {
+        rotation = Math.sin(entity.wobble) * 0.22 + (frame === 1 ? 0.12 : -0.05);
+      }
       Sprites.draw(ctx, name, entity.x, entity.y + bob, {
         scale,
         flipX,
         flash: entity.flash > 0,
-        rotation: entity.typeId === 'eagle' ? Math.sin(entity.wobble) * 0.2 : 0,
+        rotation,
       });
       return true;
     }
@@ -1269,7 +1621,10 @@ const Sprites = {
   drawEnemy(ctx, enemy) {
     const animated = [
       'slime', 'bat', 'goblin', 'ghost', 'exploder', 'splitter', 'miniSlime',
-      'spider', 'fly', 'maggot', 'eye', 'gaper', 'bloater', 'hopper',
+      'spider', 'fly', 'maggot', 'eye', 'gaper', 'bloater', 'hopper', 'brute',
+      'skeleton', 'zombie', 'mage', 'charger',
+      'eliteKnight', 'eliteMage', 'eliteBerserker', 'elitePhantom', 'eliteWarlock',
+      'boss', 'bossHydra', 'bossTitan',
     ];
     const frame = animated.includes(enemy.type)
       ? Math.floor(enemy.wobble * 2) % 2
@@ -1298,32 +1653,35 @@ const Sprites = {
       maggot: 0.72,
       fly: 0.68,
       goblin: 0.9,
+      skeleton: 1.0,
+      mage: 1.05,
     };
     const scale = scaleMap[enemy.type] || (enemy.isBoss ? 1.35 : enemy.isElite ? 1.2 : 1);
     const bob = Math.sin(enemy.wobble) * (
       enemy.type === 'fly' || enemy.type === 'bat' ? 3.5
         : enemy.type === 'hopper' ? 2.5
-          : enemy.isBoss ? 2.8
-            : enemy.isElite ? 1.8
-              : 1.2
+          : enemy.type === 'bloater' ? 1.8
+            : enemy.type === 'elitePhantom' ? 3.2
+              : enemy.type === 'eliteMage' ? 2.2
+                : enemy.type === 'bossHydra' ? 2.4
+                  : enemy.type === 'bossTitan' ? 1.4
+                    : enemy.isBoss ? 2.8
+                      : enemy.isElite ? 1.8
+                        : 1.2
     );
     const drawY = enemy.y + bob;
     const aura = enemy._def.auraColor || enemy.color;
 
     Sprites.drawShadow(ctx, enemy.x, enemy.y, scale * (enemy.isBoss ? 1.15 : enemy.isElite ? 0.95 : 0.85));
 
-    if (enemy.type === 'ghost' || enemy.behavior === 'ghost' || enemy.behavior === 'elitePhantom') {
-      Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius * 1.4, aura, 0.2);
+    if (!enemy.isElite && !enemy.isBoss) {
+      Sprites._drawEnemyTint(ctx, enemy, drawY, scale);
     }
-    if (enemy.type === 'exploder') {
-      const pulse = 0.5 + Math.sin(enemy.wobble * 4) * 0.35;
-      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 6 + pulse * 4, '#fdcb6e', pulse * 0.45);
-    }
+
+    Sprites._drawEnemyTypeEffects(ctx, enemy, drawY, scale, aura);
+
     if (enemy.charging) {
       Sprites._drawChargeStreak(ctx, enemy);
-    }
-    if (enemy.type === 'mage' || enemy.behavior === 'ranged' || enemy.behavior === 'eliteMage') {
-      Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius * 0.9, aura, 0.12 + Math.sin(enemy.wobble * 3) * 0.06);
     }
     if (enemy.isElite) {
       Sprites._drawEliteEffects(ctx, enemy, drawY, aura, scale);
@@ -1334,14 +1692,32 @@ const Sprites = {
 
     const spr = Sprites.get(name);
     if (spr) {
+      const flipX = (enemy.type === 'goblin' || enemy.type === 'charger')
+        && Math.cos(enemy.wobble * 1.5) < 0;
+      let rotation = 0;
+      if (enemy.type === 'spider') {
+        rotation = Math.sin(enemy.wobble) * 0.18;
+      } else if (enemy.charging && enemy.chargeDir) {
+        rotation = Math.atan2(enemy.chargeDir.y, enemy.chargeDir.x) * 0.35;
+      } else if (enemy.type === 'elitePhantom') {
+        rotation = Math.sin(enemy.wobble * 1.4) * 0.14;
+      } else if (enemy.type === 'bossHydra') {
+        rotation = Math.sin(enemy.wobble * 0.9) * 0.1;
+      } else if (enemy.type === 'bossTitan') {
+        rotation = Math.sin(enemy.wobble * 0.5) * 0.05;
+      }
+      let drawAlpha = enemy.alpha;
+      if (enemy.type === 'elitePhantom') {
+        drawAlpha = (enemy.alpha || 1) * (0.68 + Math.sin(enemy.wobble * 3.2) * 0.22);
+      } else if (enemy.type === 'eliteMage') {
+        drawAlpha = (enemy.alpha || 1) * (0.88 + Math.sin(enemy.wobble * 2) * 0.08);
+      }
       Sprites.draw(ctx, name, enemy.x, drawY, {
         scale,
+        flipX,
         flash: enemy.flash > 0,
-        alpha: enemy.alpha,
-        rotation: enemy.type === 'spider' ? Math.sin(enemy.wobble) * 0.18
-          : (enemy.charging && enemy.chargeDir)
-            ? Math.atan2(enemy.chargeDir.y, enemy.chargeDir.x)
-            : 0,
+        alpha: drawAlpha,
+        rotation,
       });
     } else {
       Sprites._drawEnemyFallback(ctx, enemy, drawY, scale);
@@ -1358,51 +1734,312 @@ const Sprites = {
     }
   },
 
-  _drawEliteEffects(ctx, enemy, drawY, aura, scale) {
-    const pulse = 0.35 + Math.sin(enemy.wobble * 2.5) * 0.18;
-    Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius + 8, aura, pulse * 0.22);
-    Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 10 + pulse * 3, aura, pulse * 0.42);
-    Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 16, aura, pulse * 0.18);
+  _drawEnemyTint(ctx, enemy, drawY, scale) {
+    ctx.save();
+    ctx.globalAlpha = 0.1 + Math.sin(enemy.wobble * 2) * 0.05;
+    ctx.fillStyle = enemy.color;
+    ctx.beginPath();
+    ctx.ellipse(enemy.x, drawY, enemy.radius * scale * 0.92, enemy.radius * scale * 0.72, 0, 0, TAU);
+    ctx.fill();
+    ctx.restore();
+  },
 
-    for (let i = 0; i < 4; i++) {
-      const a = enemy.wobble * 1.8 + (i / 4) * TAU;
+  _drawEnemyTypeEffects(ctx, enemy, drawY, scale, aura) {
+    const t = enemy.type;
+    const w = enemy.wobble;
+
+    if (t === 'ghost' || enemy.behavior === 'ghost') {
+      Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius * 1.4, aura, 0.22);
+      for (let i = 1; i <= 2; i++) {
+        ctx.save();
+        ctx.globalAlpha = 0.12 / i;
+        ctx.fillStyle = aura;
+        ctx.beginPath();
+        ctx.ellipse(enemy.x - i * 8, drawY, enemy.radius * 0.7, enemy.radius * 0.5, 0, 0, TAU);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    if (t === 'exploder') {
+      const pulse = 0.5 + Math.sin(w * 4) * 0.35;
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 6 + pulse * 4, '#fdcb6e', pulse * 0.5);
+      Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius * 0.5, '#e17055', pulse * 0.15);
+    }
+
+    if (t === 'mage' || enemy.behavior === 'ranged' || t === 'eye') {
+      const pulse = 0.12 + Math.sin(w * 3) * 0.08;
+      Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius * (t === 'eye' ? 1.1 : 0.9), aura, pulse);
+      if (t === 'eye') {
+        ctx.save();
+        ctx.strokeStyle = '#ff4757';
+        ctx.globalAlpha = 0.25 + Math.sin(w * 5) * 0.15;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(enemy.x, drawY, enemy.radius * 0.35, 0, TAU);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    if (t === 'charger' && enemy.charging) {
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 5, '#ff4757', 0.45);
+    }
+
+    if (t === 'splitter' || t === 'miniSlime') {
+      Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius * 0.65, '#00b894', 0.12 + Math.sin(w * 2) * 0.06);
+    }
+
+    if (t === 'bloater') {
+      for (let i = 0; i < 2; i++) {
+        const by = drawY - enemy.radius - 4 - i * 6 - Math.sin(w * 2 + i) * 3;
+        ctx.save();
+        ctx.globalAlpha = 0.35;
+        ctx.fillStyle = '#2ecc71';
+        ctx.beginPath();
+        ctx.arc(enemy.x + (i - 0.5) * 8, by, 2.5, 0, TAU);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    if (t === 'spider') {
       ctx.save();
-      ctx.fillStyle = aura;
-      ctx.globalAlpha = 0.35 + Math.sin(enemy.wobble * 3 + i) * 0.2;
+      ctx.strokeStyle = '#a29bfe';
+      ctx.globalAlpha = 0.2;
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 4; i++) {
+        const a = (i / 4) * TAU + w * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(enemy.x, drawY);
+        ctx.lineTo(enemy.x + Math.cos(a) * (enemy.radius + 10), drawY + Math.sin(a) * (enemy.radius + 6));
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    if (t === 'bat' || t === 'fly') {
+      ctx.save();
+      ctx.fillStyle = t === 'fly' ? '#2ecc71' : '#a29bfe';
+      ctx.globalAlpha = 0.3 + Math.sin(w * 6) * 0.2;
       ctx.beginPath();
-      ctx.arc(
-        enemy.x + Math.cos(a) * (enemy.radius + 12),
-        drawY + Math.sin(a) * (enemy.radius * 0.35),
-        2 + (i % 2),
-        0, TAU
-      );
+      ctx.arc(enemy.x - 10, drawY - 4, 2, 0, TAU);
+      ctx.arc(enemy.x + 10, drawY - 4, 2, 0, TAU);
       ctx.fill();
       ctx.restore();
     }
 
-    if (enemy.type === 'eliteBerserker' && enemy.charging) {
+    if (t === 'zombie' || t === 'maggot') {
       ctx.save();
-      ctx.strokeStyle = '#ff4757';
-      ctx.globalAlpha = 0.55;
-      ctx.lineWidth = 3;
+      ctx.fillStyle = t === 'zombie' ? '#2ecc71' : '#bdc3c7';
+      ctx.globalAlpha = 0.25;
       ctx.beginPath();
-      ctx.arc(enemy.x, drawY, enemy.radius + 4, 0, TAU);
-      ctx.stroke();
+      ctx.arc(enemy.x + 6, drawY - enemy.radius, 1.5, 0, TAU);
+      ctx.arc(enemy.x - 4, drawY - enemy.radius - 4, 1.5, 0, TAU);
+      ctx.fill();
       ctx.restore();
     }
-    if (enemy.type === 'eliteWarlock') {
-      Sprites._drawEnemyGlow(ctx, enemy.x, drawY - enemy.radius * 0.5, enemy.radius * 0.6, '#6c5ce7', 0.15 + Math.sin(enemy.wobble * 4) * 0.08);
+
+    if (t === 'brute') {
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY + enemy.radius * 0.4, enemy.radius * 0.9, '#e17055', 0.15);
+    }
+
+    if (t === 'gaper') {
+      ctx.save();
+      ctx.fillStyle = '#2c3e50';
+      ctx.globalAlpha = 0.55;
+      ctx.beginPath();
+      ctx.ellipse(enemy.x, drawY + 2, enemy.radius * 0.45, enemy.radius * 0.3, 0, 0, TAU);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    if (t === 'slime') {
+      ctx.save();
+      ctx.fillStyle = '#6bcb77';
+      ctx.globalAlpha = 0.25;
+      ctx.beginPath();
+      ctx.ellipse(enemy.x, drawY + enemy.radius * 0.6, enemy.radius * 0.5, 3, 0, 0, TAU);
+      ctx.fill();
+      ctx.restore();
+    }
+  },
+
+  _drawEliteEffects(ctx, enemy, drawY, aura, scale) {
+    const t = enemy.type;
+    const w = enemy.wobble;
+    const pulse = 0.35 + Math.sin(w * 2.5) * 0.18;
+
+    if (t === 'eliteKnight') {
+      Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius + 6, '#fdcb6e', pulse * 0.2);
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 11, '#b2bec3', pulse * 0.35);
+      ctx.save();
+      ctx.strokeStyle = '#fdcb6e';
+      ctx.globalAlpha = 0.35 + Math.sin(w * 2) * 0.15;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(enemy.x - enemy.radius * 0.55, drawY, enemy.radius * 0.45, -0.8, 0.8);
+      ctx.stroke();
+      ctx.restore();
+      if (enemy.charging) Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 5, '#ffd93d', 0.5);
+    } else if (t === 'eliteMage') {
+      Sprites._drawEnemyGlow(ctx, enemy.x, drawY - enemy.radius * 0.35, enemy.radius * 0.55, '#74b9ff', 0.2 + Math.sin(w * 3) * 0.1);
+      for (let i = 0; i < 3; i++) {
+        const a = w * 2.2 + (i / 3) * TAU;
+        ctx.save();
+        ctx.fillStyle = i % 2 ? '#a29bfe' : '#74b9ff';
+        ctx.globalAlpha = 0.45;
+        ctx.fillRect(
+          enemy.x + Math.cos(a) * (enemy.radius + 10) - 1.5,
+          drawY + Math.sin(a) * (enemy.radius * 0.3) - 6,
+          3, 6
+        );
+        ctx.restore();
+      }
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 14, '#6c5ce7', pulse * 0.25);
+    } else if (t === 'eliteBerserker') {
+      Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius + 8, '#ff4757', pulse * 0.28);
+      for (let i = 0; i < 3; i++) {
+        ctx.save();
+        ctx.fillStyle = '#e84393';
+        ctx.globalAlpha = 0.35;
+        ctx.beginPath();
+        ctx.arc(enemy.x + (i - 1) * 7, drawY + enemy.radius * 0.55, 2, 0, TAU);
+        ctx.fill();
+        ctx.restore();
+      }
+      if (enemy.charging) {
+        Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 6, '#ff4757', 0.55);
+        ctx.save();
+        ctx.strokeStyle = '#ff4757';
+        ctx.globalAlpha = 0.4;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(enemy.x - enemy.radius, drawY);
+        ctx.lineTo(enemy.x + enemy.radius * 1.2, drawY);
+        ctx.stroke();
+        ctx.restore();
+      }
+    } else if (t === 'elitePhantom') {
+      for (let i = 1; i <= 3; i++) {
+        ctx.save();
+        ctx.globalAlpha = 0.1 / i;
+        ctx.fillStyle = '#74b9ff';
+        ctx.beginPath();
+        ctx.ellipse(enemy.x - i * 9, drawY, enemy.radius * 0.75, enemy.radius * 0.5, 0, 0, TAU);
+        ctx.fill();
+        ctx.restore();
+      }
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 12, '#74b9ff', pulse * 0.2);
+    } else if (t === 'eliteWarlock') {
+      Sprites._drawEnemyGlow(ctx, enemy.x, drawY - enemy.radius * 0.45, enemy.radius * 0.5, '#6c5ce7', 0.18 + Math.sin(w * 4) * 0.1);
+      ctx.save();
+      ctx.strokeStyle = '#fd79a8';
+      ctx.globalAlpha = 0.25 + Math.sin(w * 3) * 0.12;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(enemy.x, drawY + enemy.radius * 0.35, enemy.radius * 0.75, 0, TAU);
+      ctx.stroke();
+      for (let i = 0; i < 5; i++) {
+        const a = (i / 5) * TAU - Math.PI / 2;
+        ctx.fillStyle = '#a29bfe';
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(
+          enemy.x + Math.cos(a + w) * (enemy.radius * 0.55) - 1,
+          drawY + enemy.radius * 0.35 + Math.sin(a + w) * (enemy.radius * 0.55) - 3,
+          2, 5
+        );
+      }
+      ctx.restore();
+    } else {
+      Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius + 8, aura, pulse * 0.22);
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 12, aura, pulse * 0.3);
     }
   },
 
   _drawBossEffects(ctx, enemy, drawY, aura, scale) {
-    const pulse = 0.25 + Math.sin(enemy.wobble * 1.5) * 0.12;
-    const pulse2 = 0.15 + Math.sin(enemy.wobble * 2.2 + 1) * 0.08;
+    const t = enemy.type;
+    const w = enemy.wobble;
+    const pulse = 0.25 + Math.sin(w * 1.5) * 0.12;
+    const pulse2 = 0.15 + Math.sin(w * 2.2 + 1) * 0.08;
 
     Sprites._drawEnemyGlow(ctx, enemy.x, drawY, enemy.radius + 18, aura, pulse * 0.28);
     Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 14, aura, pulse * 0.35);
-    Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 22, aura, pulse2 * 0.22);
-    Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 30, aura, pulse2 * 0.12);
+
+    if (t === 'boss') {
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 26, '#ffd93d', pulse2 * 0.25);
+      for (let i = -1; i <= 1; i++) {
+        ctx.save();
+        ctx.fillStyle = '#ffd93d';
+        ctx.globalAlpha = 0.5 + Math.sin(w * 3 + i) * 0.2;
+        ctx.beginPath();
+        ctx.moveTo(enemy.x + i * 10, drawY - enemy.radius - 6);
+        ctx.lineTo(enemy.x + i * 6 - 4, drawY - enemy.radius - 14);
+        ctx.lineTo(enemy.x + i * 6 + 4, drawY - enemy.radius - 14);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+      if (enemy.bossTimer != null && enemy.bossTimer < 0.6) {
+        Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 10, '#ff7675', 0.45);
+      }
+    } else if (t === 'bossHydra') {
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 24, '#55efc4', pulse2 * 0.22);
+      for (let i = -1; i <= 1; i++) {
+        const hx = enemy.x + i * (enemy.radius * 0.55);
+        const hy = drawY - enemy.radius - 4 + Math.sin(w * 2 + i) * 3;
+        Sprites._drawEnemyGlow(ctx, hx, hy, enemy.radius * 0.22, '#00cec9', 0.25 + Math.sin(w * 4 + i) * 0.12);
+        ctx.save();
+        ctx.fillStyle = '#55efc4';
+        ctx.globalAlpha = 0.4;
+        ctx.beginPath();
+        ctx.ellipse(hx, hy + 4, 4, 3, 0, 0, TAU);
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.save();
+      ctx.fillStyle = '#2ecc71';
+      ctx.globalAlpha = 0.2;
+      for (let i = 0; i < 3; i++) {
+        ctx.beginPath();
+        ctx.arc(enemy.x + (i - 1) * 12, drawY + enemy.radius * 0.5, 2.5, 0, TAU);
+        ctx.fill();
+      }
+      ctx.restore();
+    } else if (t === 'bossTitan') {
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 28, '#fdcb6e', pulse2 * 0.2);
+      ctx.save();
+      ctx.strokeStyle = '#fdcb6e';
+      ctx.globalAlpha = 0.35;
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 4; i++) {
+        const a = (i / 4) * TAU + w * 0.3;
+        ctx.beginPath();
+        ctx.moveTo(enemy.x, drawY);
+        ctx.lineTo(
+          enemy.x + Math.cos(a) * (enemy.radius + 18),
+          drawY + Math.sin(a) * (enemy.radius + 10)
+        );
+        ctx.stroke();
+      }
+      ctx.restore();
+      for (let i = 0; i < 5; i++) {
+        const ex = enemy.x + Math.sin(w * 2 + i * 1.7) * 8;
+        const ey = drawY - enemy.radius - 4 - (i * 5 + Math.sin(w * 3 + i) * 4);
+        ctx.save();
+        ctx.fillStyle = '#e17055';
+        ctx.globalAlpha = 0.45;
+        ctx.beginPath();
+        ctx.arc(ex, ey, 2 + (i % 2), 0, TAU);
+        ctx.fill();
+        ctx.restore();
+      }
+      if (enemy.bossTimer != null && enemy.bossTimer < 0.6) {
+        Sprites._drawEnemyRing(ctx, enemy.x, drawY + enemy.radius * 0.3, enemy.radius * 0.9, '#e17055', 0.4);
+      }
+    } else {
+      Sprites._drawEnemyRing(ctx, enemy.x, drawY, enemy.radius + 22, aura, pulse2 * 0.22);
+    }
 
     ctx.save();
     ctx.translate(enemy.x, drawY + enemy.radius * 0.55);
@@ -1413,33 +2050,6 @@ const Sprites = {
     ctx.arc(0, 0, enemy.radius + 10, 0, TAU);
     ctx.fill();
     ctx.restore();
-
-    for (let i = 0; i < 6; i++) {
-      const a = -enemy.wobble * 0.9 + (i / 6) * TAU;
-      ctx.save();
-      ctx.fillStyle = enemy.type === 'bossTitan' ? '#fdcb6e' : enemy.type === 'bossHydra' ? '#55efc4' : '#ff7675';
-      ctx.globalAlpha = 0.4 + Math.sin(enemy.wobble * 2 + i) * 0.25;
-      ctx.beginPath();
-      ctx.arc(
-        enemy.x + Math.cos(a) * (enemy.radius + 24),
-        drawY + Math.sin(a) * 8 - 6,
-        3,
-        0, TAU
-      );
-      ctx.fill();
-      ctx.restore();
-    }
-
-    if (enemy.bossTimer != null && enemy.bossTimer < 0.6) {
-      ctx.save();
-      ctx.strokeStyle = '#fff';
-      ctx.globalAlpha = 0.35;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(enemy.x, drawY, enemy.radius + 8, 0, TAU);
-      ctx.stroke();
-      ctx.restore();
-    }
   },
 
   _drawEnemyGlow(ctx, x, y, r, color, alpha) {
@@ -1484,30 +2094,157 @@ const Sprites = {
 
   _drawEnemyFallback(ctx, enemy, y, scale) {
     const r = enemy.radius * 0.85 * scale;
+    const t = enemy.type;
     ctx.save();
     ctx.translate(enemy.x, y);
     ctx.globalAlpha = enemy.alpha || 1;
     ctx.fillStyle = enemy.color;
 
-    if (enemy.type === 'slime' || enemy.type === 'miniSlime') {
+    if (t === 'slime' || t === 'miniSlime') {
       ctx.beginPath();
       ctx.ellipse(0, 2, r, r * 0.82, 0, 0, TAU);
       ctx.fill();
       ctx.fillStyle = '#1a1a2e';
       ctx.fillRect(-r * 0.35, -r * 0.15, r * 0.22, r * 0.22);
       ctx.fillRect(r * 0.12, -r * 0.15, r * 0.22, r * 0.22);
-    } else if (enemy.type === 'bat' || enemy.type === 'fly') {
+    } else if (t === 'bat' || t === 'fly') {
+      const wing = Math.sin(enemy.wobble * 4) * 4;
+      ctx.fillStyle = enemy.color;
       ctx.beginPath();
-      ctx.moveTo(-r, 0);
-      ctx.lineTo(-r * 0.2, -r * 0.5);
-      ctx.lineTo(r * 0.3, 0);
-      ctx.lineTo(-r * 0.2, r * 0.5);
+      ctx.moveTo(-r - wing, 0);
+      ctx.lineTo(-r * 0.2, -r * 0.55);
+      ctx.lineTo(0, 0);
+      ctx.lineTo(-r * 0.2, r * 0.55);
       ctx.closePath();
       ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(r + wing, 0);
+      ctx.lineTo(r * 0.2, -r * 0.55);
+      ctx.lineTo(0, 0);
+      ctx.lineTo(r * 0.2, r * 0.55);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#ff4757';
+      ctx.fillRect(-2, -2, 4, 4);
+    } else if (t === 'eye') {
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.45, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = '#2c3e50';
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.2, 0, TAU);
+      ctx.fill();
+    } else if (t === 'brute') {
+      ctx.fillRect(-r, -r * 0.8, r * 2, r * 1.6);
+      ctx.fillStyle = '#ffd93d';
+      ctx.fillRect(-r * 0.5, -r * 0.3, r * 0.25, r * 0.25);
+      ctx.fillRect(r * 0.25, -r * 0.3, r * 0.25, r * 0.25);
+    } else if (t === 'skeleton') {
+      ctx.fillRect(-r * 0.6, -r, r * 1.2, r * 0.55);
+      ctx.fillRect(-r * 0.35, -r * 0.2, r * 0.7, r * 1.1);
+      ctx.fillStyle = '#2d3436';
+      ctx.fillRect(-r * 0.2, -r * 0.35, r * 0.15, r * 0.15);
+      ctx.fillRect(r * 0.05, -r * 0.35, r * 0.15, r * 0.15);
+    } else if (t === 'gaper') {
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = '#2c3e50';
+      ctx.beginPath();
+      ctx.ellipse(0, r * 0.15, r * 0.55, r * 0.35, 0, 0, TAU);
+      ctx.fill();
+    } else if (t === 'eliteKnight') {
+      ctx.fillStyle = '#fdcb6e';
+      ctx.fillRect(-r * 0.55, -r * 0.95, r * 1.1, r * 1.2);
+      ctx.fillStyle = '#b2bec3';
+      ctx.fillRect(-r * 0.75, -r * 0.35, r * 0.35, r * 0.7);
+      ctx.fillStyle = '#d63031';
+      ctx.fillRect(-r * 0.15, -r * 0.55, r * 0.12, r * 0.12);
+      ctx.fillRect(r * 0.03, -r * 0.55, r * 0.12, r * 0.12);
+    } else if (t === 'eliteMage') {
+      ctx.fillStyle = '#74b9ff';
+      ctx.beginPath();
+      ctx.moveTo(0, -r * 1.1);
+      ctx.lineTo(-r * 0.55, -r * 0.35);
+      ctx.lineTo(r * 0.55, -r * 0.35);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#6c5ce7';
+      ctx.fillRect(-r * 0.45, -r * 0.35, r * 0.9, r * 1.1);
+    } else if (t === 'eliteBerserker') {
+      ctx.fillStyle = '#e84393';
+      ctx.fillRect(-r * 0.85, -r * 0.55, r * 1.7, r * 0.45);
+      ctx.fillRect(-r * 0.55, -r * 0.1, r * 1.1, r * 0.85);
+      ctx.fillStyle = '#ff4757';
+      ctx.fillRect(-r * 0.95, -r * 0.75, r * 0.25, r * 0.35);
+      ctx.fillRect(r * 0.7, -r * 0.75, r * 0.25, r * 0.35);
+    } else if (t === 'elitePhantom') {
+      ctx.globalAlpha = (enemy.alpha || 1) * 0.65;
+      ctx.fillStyle = '#74b9ff';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, r * 0.85, r * 0.65, 0, 0, TAU);
+      ctx.fill();
+    } else if (t === 'eliteWarlock') {
+      ctx.fillStyle = '#6c5ce7';
+      ctx.beginPath();
+      ctx.moveTo(0, -r);
+      ctx.lineTo(-r * 0.5, -r * 0.2);
+      ctx.lineTo(r * 0.5, -r * 0.2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = '#1a1a2e';
+      ctx.fillRect(-r * 0.45, -r * 0.2, r * 0.9, r * 1.05);
+    } else if (t === 'boss') {
+      ctx.fillStyle = '#d63031';
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = '#ffd93d';
+      for (let i = -1; i <= 1; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * r * 0.35, -r * 0.95);
+        ctx.lineTo(i * r * 0.2 - r * 0.12, -r * 1.25);
+        ctx.lineTo(i * r * 0.2 + r * 0.12, -r * 1.25);
+        ctx.closePath();
+        ctx.fill();
+      }
+    } else if (t === 'bossHydra') {
+      ctx.fillStyle = '#00cec9';
+      ctx.fillRect(-r * 0.85, -r * 0.15, r * 1.7, r * 0.95);
+      for (let i = -1; i <= 1; i++) {
+        ctx.beginPath();
+        ctx.arc(i * r * 0.55, -r * 0.55, r * 0.28, 0, TAU);
+        ctx.fill();
+      }
+    } else if (t === 'bossTitan') {
+      ctx.fillStyle = '#e17055';
+      ctx.fillRect(-r * 0.95, -r * 0.95, r * 1.9, r * 1.9);
+      ctx.strokeStyle = '#fdcb6e';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(-r * 0.4, -r * 0.5);
+      ctx.lineTo(r * 0.2, r * 0.35);
+      ctx.moveTo(r * 0.35, -r * 0.55);
+      ctx.lineTo(-r * 0.15, r * 0.45);
+      ctx.stroke();
+    } else if (enemy.isBoss || enemy.isElite) {
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, TAU);
+      ctx.fill();
+      ctx.strokeStyle = enemy._def.auraColor || enemy.color;
+      ctx.lineWidth = 2;
+      ctx.stroke();
     } else {
       ctx.beginPath();
       ctx.arc(0, 0, r, 0, TAU);
       ctx.fill();
+      ctx.fillStyle = 'rgba(0,0,0,0.35)';
+      ctx.fillRect(-r * 0.2, -r * 0.25, r * 0.15, r * 0.15);
+      ctx.fillRect(r * 0.05, -r * 0.25, r * 0.15, r * 0.15);
     }
     ctx.restore();
   },

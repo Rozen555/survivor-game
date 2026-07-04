@@ -26,9 +26,9 @@ resizeCanvas();
 
 document.getElementById('start-btn').addEventListener('click', () => {
   Audio.init();
-  Audio.play('start');
   if (!KnightSprites.ready) {
     alert('骑士 PNG 素材未加载。\n\n请双击「一键开始游戏.hta」或 copy-assets.bat 复制素材，然后 Ctrl+F5 刷新。');
+    return;
   }
   game.start(ui.selectedChar, ui.selectedDifficulty);
 });
@@ -59,6 +59,7 @@ document.getElementById('menu-btn').addEventListener('click', () => {
 document.getElementById('resume-btn').addEventListener('click', () => {
   game.state = GameState.PLAYING;
   ui.hidePause();
+  Audio.play('resume');
 });
 
 document.getElementById('quit-btn').addEventListener('click', () => {

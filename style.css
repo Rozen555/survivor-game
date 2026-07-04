@@ -370,6 +370,22 @@ body {
   flex-wrap: wrap;
 }
 
+.run-modifiers-hud {
+  margin-top: 0.45rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(116, 185, 255, 0.1);
+  border: 1px solid rgba(116, 185, 255, 0.28);
+  color: #a29bfe;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  max-width: 100%;
+}
+
+.run-modifiers-hud.hidden {
+  display: none;
+}
+
 .weapon-badge {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid #444;
@@ -386,12 +402,272 @@ body {
   font-weight: 700;
 }
 
+.weapon-badge.mechanic-badge {
+  border-color: rgba(85, 239, 196, 0.45);
+  color: #55efc4;
+}
+
 .weapon-badge.summon-badge {
   border-color: rgba(162, 155, 254, 0.45);
   background: rgba(162, 155, 254, 0.12);
 }
 
-/* Level up */
+/* Level up & pick screens */
+.levelup-panel {
+  position: relative;
+  width: min(920px, 96vw);
+  max-height: 92vh;
+  overflow: auto;
+  background: linear-gradient(165deg, #252540 0%, #141422 45%, #0f0f18 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 217, 61, 0.22);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0 0 48px rgba(255, 217, 61, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  pointer-events: auto;
+  animation: levelupPanelIn 0.35s ease-out;
+}
+
+.modifier-pick-panel {
+  border-color: rgba(116, 185, 255, 0.28);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0 0 48px rgba(116, 185, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+@keyframes levelupPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.levelup-header {
+  position: relative;
+  text-align: center;
+  padding: 1.75rem 1.5rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.levelup-header-glow {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 120px;
+  background: radial-gradient(ellipse, rgba(255, 217, 61, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+  animation: levelupGlowPulse 2.4s ease-in-out infinite;
+}
+
+.modifier-glow {
+  background: radial-gradient(ellipse, rgba(116, 185, 255, 0.32) 0%, transparent 70%);
+}
+
+@keyframes levelupGlowPulse {
+  0%, 100% { opacity: 0.65; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+}
+
+.levelup-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  margin-bottom: 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 217, 61, 0.12);
+  border: 1px solid rgba(255, 217, 61, 0.35);
+  color: #ffd93d;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.modifier-badge {
+  background: rgba(116, 185, 255, 0.12);
+  border-color: rgba(116, 185, 255, 0.35);
+  color: #74b9ff;
+}
+
+.levelup-title {
+  margin: 0;
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: linear-gradient(180deg, #fff 0%, #ffd93d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+}
+
+.levelup-subtitle {
+  margin: 0.45rem 0 0;
+  color: #9a9ab0;
+  font-size: 0.92rem;
+}
+
+.modifier-pick-hint {
+  margin: 0.35rem 0 0;
+  color: #6c6c82;
+  font-size: 0.82rem;
+}
+
+.upgrade-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.85rem;
+  padding: 1.25rem 1.35rem 1.5rem;
+}
+
+.upgrade-card {
+  position: relative;
+  --upgrade-accent: #ffd93d;
+  display: flex;
+  flex-direction: column;
+  min-height: 148px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.2) 100%);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  color: #ddd;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  animation: upgradeCardIn 0.38s ease-out both;
+  pointer-events: auto;
+}
+
+@keyframes upgradeCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.upgrade-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--upgrade-accent), transparent);
+  opacity: 0.85;
+}
+
+.upgrade-card-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, transparent 42%);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.upgrade-card-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1rem 1rem 1.05rem;
+  height: 100%;
+}
+
+.upgrade-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.upgrade-icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.35);
+}
+
+.upgrade-type-pill {
+  flex-shrink: 0;
+  padding: 0.18rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.upgrade-type-pill.type-new { color: #6bcb77; background: rgba(107, 203, 119, 0.12); border-color: rgba(107, 203, 119, 0.28); }
+.upgrade-type-pill.type-level { color: #70a1ff; background: rgba(112, 161, 255, 0.12); border-color: rgba(112, 161, 255, 0.28); }
+.upgrade-type-pill.type-attack { color: #fd79a8; background: rgba(253, 121, 168, 0.12); border-color: rgba(253, 121, 168, 0.28); }
+.upgrade-type-pill.type-stat { color: #6bcb77; background: rgba(107, 203, 119, 0.1); border-color: rgba(107, 203, 119, 0.25); }
+.upgrade-type-pill.type-class { color: #ffa502; background: rgba(255, 165, 2, 0.12); border-color: rgba(255, 165, 2, 0.28); }
+.upgrade-type-pill.type-mechanic { color: #55efc4; background: rgba(85, 239, 196, 0.1); border-color: rgba(85, 239, 196, 0.28); }
+.upgrade-type-pill.type-summon { color: #a29bfe; background: rgba(162, 155, 254, 0.12); border-color: rgba(162, 155, 254, 0.28); }
+.upgrade-type-pill.type-ultimate { color: #ff6348; background: rgba(255, 99, 72, 0.14); border-color: rgba(255, 99, 72, 0.35); }
+.upgrade-type-pill.type-blessing { color: #fdcb6e; background: rgba(253, 203, 110, 0.12); border-color: rgba(253, 203, 110, 0.28); }
+.upgrade-type-pill.type-mixed { color: #ff7675; background: rgba(255, 118, 117, 0.12); border-color: rgba(255, 118, 117, 0.28); }
+
+.upgrade-name {
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.02rem;
+  line-height: 1.3;
+}
+
+.upgrade-desc {
+  font-size: 0.82rem;
+  color: #8f8fa8;
+  line-height: 1.45;
+  margin-top: auto;
+}
+
+.upgrade-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--upgrade-accent) 55%, transparent);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.35),
+    0 0 24px color-mix(in srgb, var(--upgrade-accent) 22%, transparent);
+}
+
+.upgrade-card:hover .upgrade-icon {
+  border-color: color-mix(in srgb, var(--upgrade-accent) 45%, transparent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--upgrade-accent) 25%, transparent);
+}
+
+.upgrade-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.upgrade-card--ultimate {
+  border-color: rgba(255, 99, 72, 0.35);
+  background: linear-gradient(160deg, rgba(255, 99, 72, 0.08) 0%, rgba(0, 0, 0, 0.25) 100%);
+}
+
+.upgrade-card--mechanic .upgrade-icon {
+  box-shadow: 0 0 14px rgba(85, 239, 196, 0.15);
+}
+
 .levelup-content, .shop-content, .gameover-content, .pause-content {
   text-align: center;
   padding: 2rem;
@@ -407,14 +683,14 @@ body {
   color: #ffd93d;
 }
 
-.upgrade-options, .shop-items {
+.shop-items {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   margin: 1.5rem 0;
 }
 
-.upgrade-btn, .shop-btn {
+.shop-btn {
   background: #12121f;
   border: 2px solid #333;
   border-radius: 10px;
@@ -426,64 +702,62 @@ body {
   pointer-events: auto;
 }
 
-.upgrade-btn:hover, .shop-btn:hover {
+.shop-btn:hover {
   border-color: #ffd93d;
   background: #1f1f30;
   transform: translateX(4px);
 }
 
-.upgrade-btn .name, .shop-btn .name {
+.shop-btn .name {
   font-weight: 600;
   color: #fff;
   font-size: 1rem;
   margin-bottom: 0.25rem;
 }
 
-.upgrade-btn .desc, .shop-btn .desc {
+.shop-btn .desc {
   font-size: 0.85rem;
   color: #888;
 }
 
-.upgrade-btn .type-new {
-  color: #6bcb77;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+#levelup-screen {
+  background: radial-gradient(ellipse at center, rgba(40, 32, 10, 0.35) 0%, rgba(5, 5, 15, 0.9) 70%);
 }
 
-.upgrade-btn .type-level {
-  color: #70a1ff;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+#modifier-pick-screen {
+  background: radial-gradient(ellipse at center, rgba(20, 30, 55, 0.35) 0%, rgba(5, 5, 15, 0.9) 70%);
 }
 
-.upgrade-btn .type-attack {
-  color: #fd79a8;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+.upgrade-btn {
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-.upgrade-btn .type-summon {
-  color: #a29bfe;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+@media (min-width: 860px) {
+  .upgrade-options {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .upgrade-options:has(.upgrade-card:nth-child(4)) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
-.upgrade-btn .type-class {
-  color: #ffa502;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
+@media (max-width: 520px) {
+  .levelup-panel {
+    width: 98vw;
+    border-radius: 14px;
+  }
 
-.upgrade-btn .type-ultimate {
-  color: #ff6348;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  .upgrade-options {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .levelup-title {
+    font-size: 1.5rem;
+  }
 }
 
 .weapon-badge.dragon-badge {
@@ -672,4 +946,8 @@ body {
 
 #gameover-title.victory {
   color: #6bcb77;
+}
+
+#gameover-title.defeat {
+  color: #ff6b6b;
 }

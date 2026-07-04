@@ -4,7 +4,10 @@ class Pickup {
     this.y = y;
     this.type = type;
     this.value = value;
-    this.radius = type === 'gold' || type === 'coinBag' ? 8 : type === 'treasure' ? 10 : 6;
+    this.radius = type === 'gold' || type === 'coinBag' ? 8
+      : type === 'treasure' || type === 'relic' ? 10
+        : type === 'prism' ? 7
+          : 6;
     this.vx = randomRange(-30, 30);
     this.vy = randomRange(-30, 30);
     this.lifetime = 30;
@@ -58,6 +61,12 @@ class Pickup {
     if (this.type === 'health') {
       player.hp = Math.min(player.hp + this.value, player.maxHp);
       return { type: 'health', value: this.value };
+    }
+    if (this.type === 'prism') {
+      return { type: 'prism', value: this.value };
+    }
+    if (this.type === 'relic') {
+      return { type: 'relic', value: this.value };
     }
     return null;
   }
@@ -118,6 +127,34 @@ class Pickup {
       ctx.fillRect(-this.radius, -this.radius * 0.6, this.radius * 2, this.radius * 1.2);
       ctx.fillStyle = '#ffd93d';
       ctx.fillRect(-this.radius + 2, -this.radius * 0.6 + 2, this.radius * 2 - 4, 4);
+    } else if (this.type === 'prism') {
+      ctx.fillStyle = '#74b9ff';
+      ctx.shadowColor = '#a29bfe';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(0, -this.radius - 1);
+      ctx.lineTo(this.radius, 0);
+      ctx.lineTo(0, this.radius + 1);
+      ctx.lineTo(-this.radius, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = '#dfe6e9';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    } else if (this.type === 'relic') {
+      ctx.fillStyle = '#fdcb6e';
+      ctx.shadowColor = '#e17055';
+      ctx.shadowBlur = 14;
+      ctx.beginPath();
+      ctx.arc(0, 0, this.radius, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = '#6c5ce7';
+      ctx.beginPath();
+      ctx.moveTo(0, -this.radius + 2);
+      ctx.lineTo(this.radius - 3, this.radius - 4);
+      ctx.lineTo(-this.radius + 3, this.radius - 4);
+      ctx.closePath();
+      ctx.fill();
     } else {
       ctx.fillStyle = '#ff6b6b';
       ctx.shadowColor = '#ff6b6b';
