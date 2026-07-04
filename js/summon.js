@@ -50,15 +50,16 @@ class SummonEntity {
     this.slotIndex = slotIndex;
     this.orbitAngle = (slotIndex / Math.max(1, total)) * TAU;
     this.orbitDist = typeId === 'dragon' ? 62 + slotIndex * 10 : 52 + slotIndex * 14;
-    this.leash = def.leash || 220;
+    this.leash = def.leash || 240;
 
-    const statScale = def.isUltimate ? 1.25 : 1;
-    const scale = (1 + (level - 1) * 0.22) * statScale;
-    this.maxHp = Math.floor(def.hp * scale);
+    const statScale = def.isUltimate ? 1.35 : 1.12;
+    const hpScale = (1 + (level - 1) * 0.28) * statScale;
+    const dmgScale = (1 + (level - 1) * 0.22) * (player.damageMult || 1) * (player.summonDamageMult || 1);
+    this.maxHp = Math.floor(def.hp * hpScale);
     this.hp = this.maxHp;
-    this.damage = Math.floor(def.damage * (1 + (level - 1) * 0.18) * (player.damageMult || 1) * (player.summonDamageMult || 1));
+    this.damage = Math.floor(def.damage * dmgScale);
     this.radius = def.radius;
-    this.speed = (def.speed || 0) * (1 + (level - 1) * 0.06);
+    this.speed = (def.speed || 0) * (1 + (level - 1) * 0.08);
     this.x = player.x;
     this.y = player.y;
     this.homeX = player.x;
@@ -73,6 +74,17 @@ class SummonEntity {
     this.facing = 0;
     this.breathTimer = typeId === 'dragon' ? 0.4 : 0;
     this.stompTimer = typeId === 'dragon' ? 0.8 : 0;
+  }
+
+  refreshStats(player) {
+    const hpRatio = this.maxHp > 0 ? this.hp / this.maxHp : 1;
+    const statScale = this.def.isUltimate ? 1.35 : 1.12;
+    const hpScale = (1 + (this.level - 1) * 0.28) * statScale;
+    const dmgScale = (1 + (this.level - 1) * 0.22) * (player.damageMult || 1) * (player.summonDamageMult || 1);
+    this.maxHp = Math.floor(this.def.hp * hpScale);
+    this.hp = Math.max(1, Math.min(this.maxHp, Math.floor(this.maxHp * hpRatio)));
+    this.damage = Math.floor(this.def.damage * dmgScale);
+    this.speed = (this.def.speed || 0) * (1 + (this.level - 1) * 0.08);
   }
 
   getHomePosition(player) {
@@ -155,6 +167,12 @@ class SummonEntity {
     for (const enemy of enemies) {
       if (dist(this.x, this.y, enemy.x, enemy.y) < this.def.attackRange + enemy.radius) {
         enemy.takeDamage(this.damage, this.x, this.y);
+        if (this.def.slowOnHit) {
+          enemy.slow = {
+            mult: 0.68,
+            time: Math.max(enemy.slow?.time || 0, this.def.slowOnHit),
+          };
+        }
         particles.hit(enemy.x, enemy.y, this.def.color);
         this.flash = 0.12;
         this.cooldown = this.def.attackCd * Math.max(0.5, 1 - (this.level - 1) * 0.05);
@@ -233,7 +251,7 @@ class SummonEntity {
     let hit = false;
     for (const enemy of enemies) {
       if (dist(this.x, this.y, enemy.x, enemy.y) < aoe + enemy.radius) {
-        enemy.takeDamage(Math.floor(this.damage * 0.85), this.x, this.y);
+        enemy.takeDamage(Math.floor(this.damage * 0.92), this.x, this.y);
         particles.hit(enemy.x, enemy.y, this.def.color);
         hit = true;
       }
@@ -275,6 +293,57 @@ class SummonEntity {
     this.cooldown = this.def.shootCd * Math.max(0.5, 1 - (this.level - 1) * 0.05);
   }
 
+  updateChain(dt, player, enemies, bounds, system, particles) {
+    const home = this.getHomePosition(player);
+    this.homeX = home.x;
+    this.homeY = home.y;
+    const orbitT = Date.now() * 0.0015 + this.slotIndex;
+    this.x = home.x + Math.cos(orbitT * 3) * 16;
+    this.y = home.y + Math.sin(orbitT * 2) * 10 - 8;
+
+    this.cooldown -= dt;
+    if (this.cooldown > 0 || enemies.length === 0) return;
+
+    const target = this.findNearest(enemies, this, this.def.chainRange || 240);
+    if (!target) return;
+
+    const bounces = this.def.chainBounces || 2;
+    const hit = new Set();
+    let current = target;
+    let fromX = this.x;
+    let fromY = this.y;
+    const points = [{ x: fromX, y: fromY }];
+
+    for (let i = 0; i <= bounces; i++) {
+      if (!current || hit.has(current.id)) break;
+      hit.add(current.id);
+      const mult = i === 0 ? 1 : Math.max(0.35, 0.58 - (i - 1) * 0.12);
+      current.takeDamage(Math.floor(this.damage * mult), fromX, fromY);
+      particles.hit(current.x, current.y, this.def.color);
+      points.push({ x: current.x, y: current.y });
+
+      let nearest = null;
+      let nearestDist = this.def.chainJump || 110;
+      for (const e of enemies) {
+        if (hit.has(e.id)) continue;
+        const d = dist(current.x, current.y, e.x, e.y);
+        if (d < nearestDist) {
+          nearestDist = d;
+          nearest = e;
+        }
+      }
+      fromX = current.x;
+      fromY = current.y;
+      current = nearest;
+    }
+
+    if (points.length > 1) {
+      system.chainEffects.push({ points, life: 0.22, color: this.def.color || '#ffeaa7' });
+      this.flash = 0.15;
+    }
+    this.cooldown = this.def.chainCd * Math.max(0.5, 1 - (this.level - 1) * 0.05);
+  }
+
   updateDragon(dt, player, enemies, bounds, system, particles) {
     const home = this.getHomePosition(player);
     const hover = Math.sin(this.wobble * 1.3) * 11;
@@ -301,7 +370,7 @@ class SummonEntity {
     if (this.breathTimer <= 0 && target) {
       const range = this.def.breathRange;
       const halfArc = this.def.breathArc;
-      const breathDmg = Math.floor(this.damage * 0.95);
+      const breathDmg = Math.floor(this.damage * 1.0);
       for (const enemy of enemies) {
         const d = dist(this.x, this.y, enemy.x, enemy.y);
         if (d > range + enemy.radius) continue;
@@ -335,7 +404,7 @@ class SummonEntity {
       let hit = false;
       for (const enemy of enemies) {
         if (dist(this.x, this.y, enemy.x, enemy.y) < aoe + enemy.radius) {
-          enemy.takeDamage(Math.floor(this.damage * 0.8), this.x, this.y);
+          enemy.takeDamage(Math.floor(this.damage * 0.88), this.x, this.y);
           particles.hit(enemy.x, enemy.y, this.def.coreColor || '#fdcb6e');
           hit = true;
         }
@@ -356,7 +425,7 @@ class SummonEntity {
       system.projectiles.push(new SummonProjectile(
         this.x, this.y - 4, angle,
         this.def.projSpeed,
-        Math.floor(this.damage * 0.75),
+        Math.floor(this.damage * 0.82),
         this.def.projColor || '#ff7675',
         7,
         this.def.projAoe || 0
@@ -375,6 +444,7 @@ class SummonEntity {
       case 'charger': this.updateCharger(dt, player, enemies, bounds, system, particles); break;
       case 'stomp': this.updateStomp(dt, player, enemies, bounds, system, particles); break;
       case 'ranged': this.updateRanged(dt, player, enemies, bounds, system, particles); break;
+      case 'chain': this.updateChain(dt, player, enemies, bounds, system, particles); break;
       case 'dragon': this.updateDragon(dt, player, enemies, bounds, system, particles); break;
     }
   }
@@ -569,6 +639,7 @@ class SummonSystem {
     this.projectiles = [];
     this.stompEffects = [];
     this.breathEffects = [];
+    this.chainEffects = [];
   }
 
   sync(player) {
@@ -580,6 +651,7 @@ class SummonSystem {
         prev.slotIndex = i;
         prev.orbitDist = orbitDist;
         prev.orbitAngle = (i / Math.max(1, total)) * TAU;
+        prev.refreshStats(player);
         return prev;
       }
       return new SummonEntity(slot.id, slot.level, i, total, player);
@@ -634,9 +706,31 @@ class SummonSystem {
       this.breathEffects[i].life -= dt;
       if (this.breathEffects[i].life <= 0) this.breathEffects.splice(i, 1);
     }
+    for (let i = this.chainEffects.length - 1; i >= 0; i--) {
+      this.chainEffects[i].life -= dt;
+      if (this.chainEffects[i].life <= 0) this.chainEffects.splice(i, 1);
+    }
   }
 
   draw(ctx) {
+    for (const fx of this.chainEffects) {
+      const t = fx.life / 0.22;
+      ctx.save();
+      ctx.strokeStyle = fx.color;
+      ctx.shadowColor = fx.color;
+      ctx.shadowBlur = 8;
+      ctx.globalAlpha = t * 0.85;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i < fx.points.length; i++) {
+        const p = fx.points[i];
+        if (i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
     for (const fx of this.breathEffects) {
       const t = fx.life / fx.maxLife;
       ctx.save();

@@ -23,7 +23,7 @@ class Player {
     this.lifesteal = 0;
     this.bonusProjectiles = 0;
     this.goldMult = 1;
-    this.summonDamageMult = 1;
+    this.summonDamageMult = char.summonDamageMult || 1;
     this.mechanics = createDefaultMechanics();
     this.killCombo = 0;
     this.killComboTimer = 0;
@@ -35,6 +35,7 @@ class Player {
     this.facing = 0;
     this.weapons = [];
     this.summons = [];
+    this.bonusStarterSummon = null;
     this.startWeapon = char.startWeapon || null;
     this.startSummon = char.startSummon || null;
 
@@ -54,6 +55,13 @@ class Player {
     }
     if (this.startSummon) {
       this.summons.push({ id: this.startSummon, level: 1 });
+      if (this.charId === 'summoner') {
+        const bonus = rollSummonerStarterBonus(this.startSummon);
+        if (bonus) {
+          this.summons.push({ id: bonus, level: 1 });
+          this.bonusStarterSummon = bonus;
+        }
+      }
     }
   }
 

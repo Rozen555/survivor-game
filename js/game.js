@@ -141,11 +141,20 @@ class Game {
     this.ui.showHud();
     this.ui.updateHud(this.player, this.time, this.kills, this.difficulty, this.runModifiers);
     this.ui.updateWeapons(this.player.weapons, this.player.summons, this.player);
+    if (this.player.summons.length) this.summons.sync(this.player);
     Audio.play('start');
 
+    const lines = [];
     if (this.runModifiers.length) {
-      const modText = this.runModifiers.map(m => `${m.icon}${m.name}`).join(' · ');
-      this.triggerAnnouncement(`本局词缀：${modText}`, '#fdcb6e', 4.5);
+      lines.push(`本局词缀：${this.runModifiers.map(m => `${m.icon}${m.name}`).join(' · ')}`);
+    }
+    if (this.player.charId === 'summoner' && this.player.bonusStarterSummon) {
+      const def = SUMMON_TYPES[this.player.bonusStarterSummon];
+      lines.push(`${def.icon} 初始同伴：${def.name}`);
+    }
+    if (lines.length) {
+      this.triggerAnnouncement(lines.join(' · '), lines.length > 1 ? '#fdcb6e' : '#a29bfe', 4.5);
+      if (this.player.bonusStarterSummon) Audio.play('summon');
     }
   }
 
@@ -769,7 +778,7 @@ class Game {
         candidates.push({
           kind: 'summon',
           weight: needsMoreSummons
-            ? 90 + missingSummons * 22 + (def.isUltimate ? 15 : 0)
+            ? 260 + missingSummons * 40 + (def.isUltimate ? 25 : 0)
             : 46,
           opt: {
             type: 'summon',
@@ -792,7 +801,7 @@ class Game {
         if (!def) continue;
         candidates.push({
           kind: 'summonLevel',
-          weight: needsMoreSummons ? 8 : 22,
+          weight: needsMoreSummons ? 4 : 22,
           opt: {
             type: 'summonLevel',
             id,
@@ -811,7 +820,7 @@ class Game {
       if (!used.has(`weapon:${id}`)) {
         candidates.push({
           kind: 'newWeapon',
-          weight: needsMoreSummons ? 6 : 12,
+          weight: needsMoreSummons ? 2 : 12,
           opt: this._weaponUpgradeOption(id, true),
         });
       }
@@ -821,7 +830,7 @@ class Game {
       if (!used.has(`classAttack:${pick.id}`)) {
         candidates.push({
           kind: 'classAttack',
-          weight: needsMoreSummons ? 10 : 14,
+          weight: needsMoreSummons ? 4 : 14,
           opt: {
             type: 'classAttack',
             id: pick.id,
@@ -839,7 +848,7 @@ class Game {
       if (!used.has(`stat:${stat.id}`)) {
         candidates.push({
           kind: 'stat',
-          weight: needsMoreSummons ? 8 : 12,
+          weight: needsMoreSummons ? 3 : 12,
           opt: { type: 'stat', id: stat.id, name: stat.name, desc: stat.desc, icon: stat.icon, isNew: false },
         });
       }
@@ -849,7 +858,7 @@ class Game {
       if (!used.has(`attack:${pick.id}`)) {
         candidates.push({
           kind: 'attack',
-          weight: needsMoreSummons ? 6 : 10,
+          weight: needsMoreSummons ? 2 : 10,
           opt: {
             type: 'attack',
             id: pick.id,
@@ -866,7 +875,7 @@ class Game {
       if (!used.has(`mechanic:${mech.id}`)) {
         candidates.push({
           kind: 'mechanic',
-          weight: needsMoreSummons ? 10 : 18,
+          weight: needsMoreSummons ? 5 : 18,
           opt: {
             type: 'mechanic',
             id: mech.id,
@@ -934,12 +943,16 @@ class Game {
 
     const summonCount = countUniqueSummons(this.player.summons);
     const needsMoreSummons = summonCount < DRAGON_UNLOCK_SUMMON_TYPES;
-    if (needsMoreSummons && ctx.unownedSummons.length && options.length < count) {
-      const pool = ctx.unownedSummons.filter(id => !used.has(`summon:${id}`));
-      if (pool.length) {
+    const missingSummons = DRAGON_UNLOCK_SUMMON_TYPES - summonCount;
+    if (needsMoreSummons && ctx.unownedSummons.length) {
+      const guaranteeSlots = Math.min(2, missingSummons, count - options.length);
+      for (let g = 0; g < guaranteeSlots; g++) {
+        const pool = ctx.unownedSummons.filter(id => !used.has(`summon:${id}`));
+        if (!pool.length) break;
         const id = pool[Math.floor(Math.random() * pool.length)];
         const def = SUMMON_TYPES[id];
-        if (def && this._tryPushUpgrade(options, used, {
+        if (!def) continue;
+        if (this._tryPushUpgrade(options, used, {
           type: 'summon',
           id,
           name: def.name,

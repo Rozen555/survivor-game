@@ -198,32 +198,36 @@ const Sprites = {
     this._bake('summon_turret_0', [
       '......ssssss......',
       '.....sbbbbbbbs.....',
-      '....sbllccllbs....',
+      '....sbllWWllbs....',
       '....sbccwwccbs....',
+      '...sbbbccWWcbbbs...',
+      '...sbccccccccbs...',
       '....sbccbbccbs....',
       '...sbbbccccbbbs...',
-      '...ssbbbbbbbbss...',
-      '....ssssssssss....',
-      '.....cccccccc.....',
-      '......llllll......',
-      '.......cccc.......',
-      '........cc........',
-    ], { s: '#3d3d55', b: '#5352ed', c: '#00cec9', l: '#81ecec', w: '#dff9fb' }, SS);
+      '....ssbbbbbbss....',
+      '.....ssssssss.....',
+      '......dddddd......',
+      '......dssssd......',
+      '.......ssss.......',
+      '........ss........',
+    ], { s: '#2d3436', b: '#5352ed', c: '#00cec9', l: '#81ecec', w: '#dff9fb', W: '#fff', d: '#636e72' }, SS);
 
     this._bake('summon_turret_1', [
       '......ssssss......',
       '.....sbbbbbbbs.....',
-      '....sbccwwccbs....',
+      '....sbccWWccbs....',
       '....sbwwllwwbs....',
+      '...sbbbccWWcbbbs...',
+      '...sbccccccccbs...',
       '....sbccbbccbs....',
       '...sbbbccccbbbs...',
-      '...ssbbbbbbbbss...',
-      '....ssssssssss....',
+      '....ssbbbbbbss....',
       '.....llllllll.....',
-      '......cccccc......',
-      '.......cccc.......',
-      '........cc........',
-    ], { s: '#3d3d55', b: '#5352ed', c: '#00cec9', l: '#81ecec', w: '#dff9fb' }, SS);
+      '......dddddd......',
+      '......dssssd......',
+      '.......ssss.......',
+      '........ss........',
+    ], { s: '#2d3436', b: '#5352ed', c: '#00cec9', l: '#81ecec', w: '#dff9fb', W: '#fff', d: '#636e72' }, SS);
 
     this._bake('summon_boar_0', [
       '................',
@@ -232,11 +236,12 @@ const Sprites = {
       '..hbbbbbbeebbbh.',
       '.hbbbbbbbtbbbbbh',
       '.bbbbbbbbbbbbbb.',
-      '..bbbbbbbbbbbb..',
+      '..bbbbnnnnbbbb..',
       '...bb......bb...',
       '..bb........bb..',
       '.bb..........bb.',
-    ], { b: '#8B4513', h: '#5a3a1a', e: '#2d3436', t: '#f5deb3' }, SS);
+      '..tt........tt..',
+    ], { b: '#8B4513', h: '#5a3a1a', e: '#2d3436', t: '#f5deb3', n: '#3e2723' }, SS);
 
     this._bake('summon_boar_1', [
       '................',
@@ -245,37 +250,38 @@ const Sprites = {
       '..hbbbbbbeebbbh.',
       '.hbbbbbbbtbbbbbh',
       '.bbbbbbbbbbbbbb.',
-      '..bbbbbbbbbbbb..',
+      '..bbbbnnnnbbbb..',
       '...bb......bb...',
       '..b..........b..',
       '.bb..........bb.',
-    ], { b: '#8B4513', h: '#5a3a1a', e: '#2d3436', t: '#f5deb3' }, SS);
+      '..tt........tt..',
+    ], { b: '#8B4513', h: '#5a3a1a', e: '#2d3436', t: '#f5deb3', n: '#3e2723' }, SS);
 
     this._bake('summon_wolf_0', [
       '......gggg......',
-      '.....gggggg.....',
+      '.....gGGGGg.....',
       '....gggeegg.....',
-      '...gggGGgggg....',
-      '..gggggggggg....',
-      '..gggggggggg....',
-      '..wwg....gww....',
+      '...gggGGggggg...',
+      '..gggggggggggg..',
+      '..ggggnnnggggg..',
+      '..wwgg..ggww....',
       '..gg......gg....',
       '.g..........g...',
-      '..g........g....',
-    ], { g: '#636e72', G: '#b2bec3', e: '#dfe6e9', w: '#4a5568' }, SS);
+      '..tt........tt..',
+    ], { g: '#4a5568', G: '#636e72', e: '#ecf0f1', n: '#2d3436', w: '#95a5a6', t: '#b2bec3' }, SS);
 
     this._bake('summon_wolf_1', [
       '......gggg......',
-      '.....gggggg.....',
+      '.....gGGGGg.....',
       '....gggeegg.....',
-      '...gggGGgggg....',
-      '..gggggggggg....',
-      '..gggggggggg....',
+      '...gggGGggggg...',
+      '..gggggggggggg..',
+      '..ggggnnnggggg..',
       '..g........g....',
       '...g......g.....',
       '....g....g......',
-      '.....g..g.......',
-    ], { g: '#636e72', G: '#b2bec3', e: '#dfe6e9', w: '#4a5568' }, SS);
+      '.....tt..tt.....',
+    ], { g: '#4a5568', G: '#636e72', e: '#ecf0f1', n: '#2d3436', w: '#95a5a6', t: '#b2bec3' }, SS);
 
     this._bake('summon_bear_0', [
       '......bb......bb......',
@@ -289,7 +295,8 @@ const Sprites = {
       '..bb....BBBBBB....bb..',
       '..bb.....BBBB.....bb..',
       '.bb.......bb.......bb.',
-    ], { b: '#4a3428', B: '#6d4c41', e: '#2d3436', m: '#8d6e63', n: '#3e2723' }, SL);
+      '..cc......cc......cc..',
+    ], { b: '#4a3428', B: '#6d4c41', e: '#2d3436', m: '#8d6e63', n: '#3e2723', c: '#5d4037' }, SL);
 
     this._bake('summon_bear_1', [
       '......bb......bb......',
@@ -303,7 +310,8 @@ const Sprites = {
       '..bb....BBBBBB....bb..',
       '.bb......BBBB......bb.',
       'bb........bb........bb',
-    ], { b: '#4a3428', B: '#6d4c41', e: '#2d3436', m: '#8d6e63', n: '#3e2723' }, SL);
+      'cc........cc........cc',
+    ], { b: '#4a3428', B: '#6d4c41', e: '#2d3436', m: '#8d6e63', n: '#3e2723', c: '#5d4037' }, SL);
 
     this._bake('summon_mammoth_0', [
       '........tttttt........',
@@ -317,9 +325,9 @@ const Sprites = {
       '.tttttttttttttttttttt.',
       'tttttttttttttttttttttt',
       'hhh................hhh',
-      'hh..................hh',
-      'hh..................hh',
-    ], { t: '#95a5a6', f: '#b2bec3', e: '#2d3436', i: '#ecf0f1', h: '#7f8c8d', n: '#636e72' }, SL);
+      'hh..hh..........hh..hh',
+      'hh..cc..........cc..hh',
+    ], { t: '#95a5a6', e: '#2d3436', i: '#ecf0f1', h: '#7f8c8d', n: '#636e72', c: '#576574' }, SL);
 
     this._bake('summon_mammoth_1', [
       '........tttttt........',
@@ -333,9 +341,9 @@ const Sprites = {
       '.tttttttttttttttttttt.',
       'tttttttttttttttttttttt',
       'hhh................hhh',
-      'hh..hh..........hh..hh',
-      'hh..hh..........hh..hh',
-    ], { t: '#95a5a6', f: '#b2bec3', e: '#2d3436', i: '#ecf0f1', h: '#7f8c8d', n: '#636e72' }, SL);
+      'hh.hhh..........hhh.hh',
+      'hh.hcc..........cch.hh',
+    ], { t: '#95a5a6', e: '#2d3436', i: '#ecf0f1', h: '#7f8c8d', n: '#636e72', c: '#576574' }, SL);
 
     this._bake('summon_eagle_0', [
       '................',
@@ -346,6 +354,7 @@ const Sprites = {
       '.....yyyrrrr......',
       '......rrrr........',
       '.......rr.........',
+      '........r.........',
       '................',
     ], { r: '#e17055', w: '#fff', e: '#2d3436', y: '#fdcb6e' }, SS);
 
@@ -359,7 +368,163 @@ const Sprites = {
       '..rr..........rr..',
       '.rr............rr.',
       '................',
+      '................',
     ], { r: '#e17055', w: '#fff', e: '#2d3436', y: '#fdcb6e' }, SS);
+
+    this._bake('summon_golem_0', [
+      '......gggggg......',
+      '.....gGGGGGg.....',
+      '....gGGeeGGg....',
+      '...gGGGmmGGGg...',
+      '..gGGGGGGGGGGg..',
+      '.gGGGGGGGGGGGGg.',
+      '.gGGGGGGGGGGGGg.',
+      '..gGGGGGGGGGGg..',
+      '...gg......gg...',
+      '..gg........gg..',
+      '.gg..........gg.',
+    ], { g: '#636e72', G: '#7f8c8d', e: '#2d3436', m: '#b2bec3' }, SL);
+
+    this._bake('summon_golem_1', [
+      '......gggggg......',
+      '.....gGGGGGg.....',
+      '....gGGeeGGg....',
+      '...gGGGmmGGGg...',
+      '..gGGGGGGGGGGg..',
+      '.gGGGGGGGGGGGGg.',
+      '.gGGGGGGGGGGGGg.',
+      '..gGGGGGGGGGGg..',
+      '...gg......gg...',
+      '..gg........gg..',
+      '.gg..........gg.',
+      '..cc........cc..',
+    ], { g: '#636e72', G: '#7f8c8d', e: '#2d3436', m: '#b2bec3', c: '#576574' }, SL);
+
+    this._bake('summon_imp_0', [
+      '......rrrr......',
+      '.....rrRRrr.....',
+      '....rrreeerr....',
+      '...rrrmmrrrr....',
+      '..rrrrrrrrrr....',
+      '...ww....ww.....',
+      '..tt......tt....',
+      '...tt....tt.....',
+      '................',
+    ], { r: '#6c5ce7', R: '#a29bfe', e: '#fff', m: '#fd79a8', w: '#dfe6e9', t: '#2d3436' }, SS);
+
+    this._bake('summon_imp_1', [
+      '......rrrr......',
+      '.....rrRRrr.....',
+      '....rrreeerr....',
+      '...rrrmmrrrr....',
+      '..rrrrrrrrrr....',
+      '...ww....ww.....',
+      '..tt......tt....',
+      '....tt..tt......',
+      '.....tttt.......',
+    ], { r: '#6c5ce7', R: '#a29bfe', e: '#fff', m: '#fd79a8', w: '#dfe6e9', t: '#2d3436' }, SS);
+
+    this._bake('summon_spider_0', [
+      '................',
+      '...ll......ll...',
+      '..llllllllllll..',
+      '.llllllllllllll.',
+      '.lllleeelllllll.',
+      '..llllllllllll..',
+      '...llllllllll...',
+      '....ll....ll....',
+      '...ll......ll...',
+      '................',
+    ], { l: '#2d3436', e: '#e17055' }, SS);
+
+    this._bake('summon_spider_1', [
+      '................',
+      '...ll......ll...',
+      '..llllllllllll..',
+      '.llllllllllllll.',
+      '.lllleeelllllll.',
+      '..llllllllllll..',
+      '...llllllllll...',
+      '..ll........ll..',
+      '.ll..........ll.',
+      '................',
+    ], { l: '#2d3436', e: '#e17055' }, SS);
+
+    this._bake('summon_wisp_0', [
+      '................',
+      '......yyyy......',
+      '.....yYYYYy.....',
+      '....yYwwYYy.....',
+      '....yYwwYYy.....',
+      '.....yYYYYy.....',
+      '......yyyy......',
+      '.......yy.......',
+      '................',
+    ], { y: '#ffeaa7', Y: '#fdcb6e', w: '#fff' }, SS);
+
+    this._bake('summon_wisp_1', [
+      '................',
+      '.....yyyyyy.....',
+      '....yYYYYYYy....',
+      '...yYYwwwwYYy...',
+      '...yYYwwwwYYy...',
+      '....yYYYYYYy....',
+      '.....yyyyyy.....',
+      '......yyyy......',
+      '................',
+    ], { y: '#ffeaa7', Y: '#fdcb6e', w: '#fff' }, SS);
+
+    this._bake('summon_scorpion_0', [
+      '................',
+      '......gggg......',
+      '.....ggGGgg.....',
+      '....gggeegg.....',
+      '...gggggggg.....',
+      '..gggggggggg....',
+      '...gg....gg.....',
+      '..gg......gg....',
+      '.tt........tt...',
+      '................',
+    ], { g: '#00b894', G: '#55efc4', e: '#2d3436', t: '#0984e3' }, SS);
+
+    this._bake('summon_scorpion_1', [
+      '................',
+      '......tttt......',
+      '.....gggggg.....',
+      '....ggGGGGgg....',
+      '...gggeeeegg....',
+      '..gggggggggg....',
+      '...gg....gg.....',
+      '..gg......gg....',
+      '.tt........tt...',
+      '................',
+    ], { g: '#00b894', G: '#55efc4', e: '#2d3436', t: '#0984e3' }, SS);
+
+    this._bake('summon_skeleton_0', [
+      '......wwww......',
+      '.....wwEEww.....',
+      '....wwwwwwww....',
+      '....wwwwwwww....',
+      '.....wwwwww.....',
+      '......wwww......',
+      '.....ww..ww.....',
+      '....ww....ww....',
+      '....ww....ww....',
+      '................',
+    ], { w: '#dfe6e9', E: '#2d3436' }, SS);
+
+    this._bake('summon_skeleton_1', [
+      '......wwww......',
+      '.....wwEEww.....',
+      '....wwwwwwww....',
+      '....wwwwwwww....',
+      '.....wwwwww.....',
+      '......wwww......',
+      '.....ww..ww.....',
+      '....ww....ww....',
+      '..ww........ww..',
+      '................',
+    ], { w: '#dfe6e9', E: '#2d3436' }, SS);
 
     this._bake('summon_dragon_0', [
       '........bb........bb........',
@@ -377,7 +542,8 @@ const Sprites = {
       '..rywwwwwwwwwwwwwwwyr..',
       '...rwwwwwwwwwwwwwwwr...',
       '....rrrr......rrrr....',
-    ], { r: '#d63031', y: '#fdcb6e', o: '#e17055', w: '#ff7675', e: '#fff', b: '#2d1b4e' }, SL);
+      '.....ff........ff.....',
+    ], { r: '#d63031', y: '#fdcb6e', o: '#e17055', w: '#ff7675', e: '#fff', b: '#2d1b4e', f: '#6c5ce7' }, SL);
 
     this._bake('summon_dragon_1', [
       'bb..............bb........bb',
@@ -395,7 +561,8 @@ const Sprites = {
       '..ryyywwwwwwwwwwwwwyyr..',
       '..rywwwwwwwwwwwwwwwyr..',
       '...rwwwwwwwwwwwwwwwr...',
-    ], { r: '#d63031', y: '#fdcb6e', o: '#e17055', w: '#ff7675', e: '#fff', b: '#2d1b4e' }, SL);
+      '....ff............ff....',
+    ], { r: '#d63031', y: '#fdcb6e', o: '#e17055', w: '#ff7675', e: '#fff', b: '#2d1b4e', f: '#6c5ce7' }, SL);
 
     // ── 怪物：史莱姆 ──
     this._bake('enemy_slime_0', [
@@ -1507,7 +1674,10 @@ const Sprites = {
   },
 
   drawSummon(ctx, entity) {
-    const animated = ['turret', 'boar', 'wolf', 'bear', 'mammoth', 'eagle', 'dragon'];
+    const animated = [
+      'turret', 'boar', 'wolf', 'bear', 'mammoth', 'eagle',
+      'golem', 'imp', 'spider', 'wisp', 'scorpion', 'skeleton', 'dragon',
+    ];
     const frame = animated.includes(entity.typeId)
       ? Math.floor(entity.wobble * 2) % 2
       : 0;
@@ -1519,6 +1689,12 @@ const Sprites = {
       bear: 1.38,
       mammoth: 1.5,
       eagle: 1.1,
+      golem: 1.32,
+      imp: 1.05,
+      spider: 1.08,
+      wisp: 1.12,
+      scorpion: 1.06,
+      skeleton: 1.08,
       dragon: 1.42,
     };
     const scale = scaleMap[entity.typeId] || 1;
@@ -1535,6 +1711,7 @@ const Sprites = {
             : Math.sin(entity.wobble) * 1.5;
     const shadowMult = entity.typeId === 'mammoth' ? 1.2
       : entity.typeId === 'bear' ? 1.05
+      : entity.typeId === 'golem' ? 1.08
       : entity.typeId === 'dragon' ? 1.12
       : entity.typeId === 'boar' && charging ? 0.95
       : 0.85;
@@ -1543,7 +1720,8 @@ const Sprites = {
 
     if (entity.typeId === 'turret') {
       const pulse = 0.2 + Math.sin(entity.wobble * 3) * 0.1;
-      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob - 4, 14, '#00cec9', pulse);
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob - 4, 16, '#00cec9', pulse);
+      Sprites._drawEnemyRing(ctx, entity.x, entity.y + bob - 2, 18 + Math.sin(entity.wobble * 2) * 2, '#5352ed', 0.12 + pulse * 0.15);
     } else if (entity.typeId === 'boar' && charging) {
       const back = entity.facing || 0;
       for (let i = 0; i < 3; i++) {
@@ -1558,10 +1736,32 @@ const Sprites = {
         ctx.fill();
         ctx.restore();
       }
+    } else if (entity.typeId === 'boar') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 2, '#8B4513', 0.06);
     } else if (entity.typeId === 'wolf') {
       Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 2, '#b2bec3', 0.08);
     } else if (entity.typeId === 'eagle') {
       Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 4, '#fab1a0', 0.1 + Math.sin(entity.wobble * 2) * 0.04);
+    } else if (entity.typeId === 'wisp') {
+      const pulse = 0.25 + Math.sin(entity.wobble * 4) * 0.12;
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob - 4, entity.radius + 8, '#ffeaa7', pulse);
+      Sprites._drawEnemyRing(ctx, entity.x, entity.y + bob - 2, entity.radius + 12, '#fdcb6e', pulse * 0.35);
+    } else if (entity.typeId === 'imp') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 3, '#a29bfe', 0.12 + Math.sin(entity.wobble * 3) * 0.05);
+    } else if (entity.typeId === 'spider') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 2, '#636e72', 0.08);
+    } else if (entity.typeId === 'scorpion') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 3, '#55efc4', 0.1);
+      if (entity.flash > 0) {
+        Sprites._drawEnemyRing(ctx, entity.x, entity.y + bob, entity.radius + 10, '#00b894', entity.flash * 0.35);
+      }
+    } else if (entity.typeId === 'golem') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 4, '#b2bec3', 0.07);
+      if (entity.flash > 0) {
+        Sprites._drawEnemyRing(ctx, entity.x, entity.y + bob, entity.radius + 12, '#ecf0f1', entity.flash * 0.3);
+      }
+    } else if (entity.typeId === 'skeleton') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 2, '#dfe6e9', 0.06);
     } else if (entity.typeId === 'dragon') {
       const pulse = 0.35 + Math.sin(entity.wobble * 2.5) * 0.15;
       Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 10, '#ff7675', pulse * 0.35);
@@ -1585,6 +1785,7 @@ const Sprites = {
         Sprites._drawEnemyRing(ctx, entity.x, entity.y + bob, entity.radius + 14, '#ecf0f1', entity.flash * 0.35);
       }
     } else if (entity.typeId === 'bear') {
+      Sprites._drawEnemyGlow(ctx, entity.x, entity.y + bob, entity.radius + 4, '#8d6e63', 0.08 + Math.sin(entity.wobble * 0.9) * 0.03);
       if (entity.flash > 0) {
         Sprites._drawEnemyRing(ctx, entity.x, entity.y + bob, entity.radius + 10, '#8d6e63', entity.flash * 0.4);
       }
@@ -1606,6 +1807,8 @@ const Sprites = {
         rotation = entity.facing || 0;
       } else if (entity.typeId === 'eagle') {
         rotation = Math.sin(entity.wobble) * 0.22 + (frame === 1 ? 0.12 : -0.05);
+      } else if (entity.typeId === 'wisp') {
+        rotation = Math.sin(entity.wobble * 1.5) * 0.08;
       }
       Sprites.draw(ctx, name, entity.x, entity.y + bob, {
         scale,

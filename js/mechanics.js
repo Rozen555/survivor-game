@@ -498,6 +498,8 @@ class MechanicsSystem {
     this.staticHits = 0;
     this.timeWarpTimer = 8;
     this.whirlwindTimer = 0;
+    this._inProcSplash = false;
+    this._inKillNova = false;
   }
 
   update(dt) {
@@ -761,22 +763,35 @@ class MechanicsSystem {
 
   _splashDamage(x, y, baseDamage, player, radius, mult) {
     const dmg = Math.floor(baseDamage * mult);
-    for (const enemy of this.game.enemies) {
-      if (dist(x, y, enemy.x, enemy.y) < radius + enemy.radius) {
-        applyPlayerDamageValue(this.game, enemy, player, dmg, x, y, false);
-        this.game.particles.hit(enemy.x, enemy.y, '#fab1a0');
+    this._inProcSplash = true;
+    try {
+      for (const enemy of this.game.enemies) {
+        if (enemy.hp <= 0) continue;
+        if (dist(x, y, enemy.x, enemy.y) < radius + enemy.radius) {
+          enemy.takeDamage(dmg, x, y);
+          this.game.particles.hit(enemy.x, enemy.y, '#fab1a0');
+        }
       }
+    } finally {
+      this._inProcSplash = false;
     }
   }
 
   _killNova(x, y, player, level) {
+    if (this._inKillNova) return;
+    this._inKillNova = true;
     const radius = 50 + level * 16;
     const dmg = 10 + level * 7 + player.level * 1.5;
-    for (const enemy of this.game.enemies) {
-      if (dist(x, y, enemy.x, enemy.y) < radius + enemy.radius) {
-        enemy.takeDamage(dmg, x, y);
-        this.game.particles.hit(enemy.x, enemy.y, '#fdcb6e');
+    try {
+      for (const enemy of this.game.enemies) {
+        if (enemy.hp <= 0) continue;
+        if (dist(x, y, enemy.x, enemy.y) < radius + enemy.radius) {
+          enemy.takeDamage(dmg, x, y);
+          this.game.particles.hit(enemy.x, enemy.y, '#fdcb6e');
+        }
       }
+    } finally {
+      this._inKillNova = false;
     }
     this.game.camera.shake = Math.max(this.game.camera.shake || 0, 2 + level);
     for (let i = 0; i < 12; i++) {
@@ -859,7 +874,12 @@ class MechanicsSystem {
         this._chainLightning(enemy, roll.damage, player, Math.max(2, (m.chainBounces || 2) - 1));
       }
     }
-    if (m.overkillSplash > 0 && enemy.hp / enemy.maxHp < 0.32) {
+    if (
+      m.overkillSplash > 0 &&
+      !this._inProcSplash &&
+      enemy.hp > 0 &&
+      enemy.hp / enemy.maxHp < 0.32
+    ) {
       this._splashDamage(
         enemy.x, enemy.y, roll.damage, player,
         38 + m.overkillSplash * 12,
